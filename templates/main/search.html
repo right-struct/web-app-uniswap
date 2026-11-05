@@ -1,15 +1,423 @@
 {% extends 'main/layout.html' %}
+{% load static %}
 
-{% block title %}Search | UniSwap{% endblock %}
+{% block title %}Search & Swap | UniSwap SDU{% endblock %}
 
 {% block content %}
-    <h1>Search </h1>
-    <search>
-        <form>
-            <input name="srch" id="srch" placeholder="Searching...">
-        </form>
-    </search>
+<div class="search-page-container">
+    <header class="page-top-nav">
+        <a href="{% url 'index' %}" class="back-link">&larr; Back to Home</a>
+        <h2>UniSwap SDU &mdash; Swap Market</h2>
+    </header>
+
+    <div class="api-demo-grid">
+        <!-- Section 1: Add New Item (Demonstrates HTTP POST) -->
+        <section class="card add-item-card">
+            <h3>Post an Item for Swap</h3>
+            <p class="subtitle">Demonstrates HTTP <code>POST /api/items/</code></p>
+            <form id="addItemForm">
+                <div class="form-group">
+                    <label for="itemTitle">Item Title *</label>
+                    <input type="text" id="itemTitle" placeholder="e.g. Calculus 8th Edition, TI-84 Calculator" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="itemCategory">Category</label>
+                    <select id="itemCategory">
+                        <option value="books">Books & Notes</option>
+                        <option value="electronics">Electronics & Gadgets</option>
+                        <option value="clothing">Clothing & Merch</option>
+                        <option value="services">Tutoring & Services</option>
+                        <option value="other" selected>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="itemContact">Contact (Telegram / SDU Email) *</label>
+                    <input type="text" id="itemContact" placeholder="e.g. @sdu_student or student@sdu.edu.kz" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="itemDescription">Description</label>
+                    <textarea id="itemDescription" rows="3" placeholder="Condition, what you want in exchange, etc."></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn btn-primary">List Item</button>
+                <div id="formStatus" class="status-msg"></div>
+            </form>
+        </section>
+
+        <!-- Section 2: Search & Live Item List (Demonstrates HTTP GET) -->
+        <section class="card items-list-card">
+            <div class="list-header">
+                <h3>Available Swap Items</h3>
+                <span id="itemsCount" class="badge">Loading...</span>
+            </div>
+            <p class="subtitle">Demonstrates HTTP <code>GET /api/items/?search=...</code></p>
+
+            <div class="search-bar-wrapper">
+                <input type="text" id="searchInput" placeholder="Search by title, description or contact...">
+                <button type="button" id="refreshBtn" class="btn btn-secondary">Refresh</button>
+            </div>
+
+            <div id="itemsContainer" class="items-list">
+                <!-- Dynamically populated via client-side fetch() -->
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+.search-page-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #212153;
+}
+
+.page-top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #F1F3F4;
+}
+
+.back-link {
+    color: #212153;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    background: #F1F3F4;
+    border-radius: 20px;
+    transition: 0.2s;
+}
+
+.back-link:hover {
+    background: #e2e5e8;
+}
+
+.api-demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 25px;
+}
+
+@media (max-width: 850px) {
+    .api-demo-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(33, 33, 83, 0.08);
+    border: 1px solid #ECEFF1;
+}
+
+.card h3 {
+    margin-bottom: 4px;
+    font-size: 20px;
+    color: #212153;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 18px;
+}
+
+.subtitle code {
+    background: #f1f3f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #d66427;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #212153;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+.search-bar-wrapper input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #dcdfe3;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.search-bar-wrapper input:focus {
+    border-color: #F3A367;
+}
+
+.btn {
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 10px 20px;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: #F3A367;
+    color: white;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background: #e49151;
+}
+
+.btn-secondary {
+    background: #212153;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #313175;
+}
+
+.status-msg {
+    margin-top: 10px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.status-msg.success { color: #2e7d32; }
+.status-msg.error { color: #c62828; }
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge {
+    background: #212153;
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.search-bar-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 520px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.item-card {
+    padding: 16px;
+    background: #F8F9FA;
+    border-radius: 12px;
+    border-left: 4px solid #F3A367;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.item-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.item-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #212153;
+}
+
+.item-category-tag {
+    font-size: 11px;
+    background: #e8ecf4;
+    color: #212153;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.item-desc {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.item-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #777;
+}
+
+.item-contact {
+    font-weight: 600;
+    color: #212153;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+}
+</style>
+
+<script>
+// Client-side API Communication Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const itemsContainer = document.getElementById('itemsContainer');
+    const itemsCount = document.getElementById('itemsCount');
+    const searchInput = document.getElementById('searchInput');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const addItemForm = document.getElementById('addItemForm');
+    const formStatus = document.getElementById('formStatus');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // 1. HTTP GET: Fetch items from backend API
+    async function fetchItems(query = '') {
+        try {
+            itemsCount.textContent = 'Loading...';
+            const url = query ? `/api/items/?search=${encodeURIComponent(query)}` : '/api/items/';
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            renderItems(data.items || []);
+            itemsCount.textContent = `${data.count || 0} item(s)`;
+        } catch (err) {
+            console.error('Fetch error:', err);
+            itemsContainer.innerHTML = `<div class="empty-state">Error loading items: ${err.message}</div>`;
+            itemsCount.textContent = 'Error';
+        }
+    }
+
+    // 2. Render items list
+    function renderItems(items) {
+        if (items.length === 0) {
+            itemsContainer.innerHTML = '<div class="empty-state">No swap items found. Be the first to list one!</div>';
+            return;
+        }
+
+        itemsContainer.innerHTML = items.map(item => `
+            <div class="item-card">
+                <div class="item-card-header">
+                    <span class="item-title">${escapeHtml(item.title)}</span>
+                    <span class="item-category-tag">${escapeHtml(item.category_display || item.category)}</span>
+                </div>
+                ${item.description ? `<p class="item-desc">${escapeHtml(item.description)}</p>` : ''}
+                <div class="item-meta">
+                    <span class="item-contact">&#9993; ${escapeHtml(item.contact)}</span>
+                    <span>${escapeHtml(item.created_at)}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // 3. HTTP POST: Submit new item to backend API
+    addItemForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        formStatus.textContent = '';
+        formStatus.className = 'status-msg';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Posting...';
+
+        const payload = {
+            title: document.getElementById('itemTitle').value.trim(),
+            category: document.getElementById('itemCategory').value,
+            contact: document.getElementById('itemContact').value.trim(),
+            description: document.getElementById('itemDescription').value.trim()
+        };
+
+        try {
+            const response = await fetch('/api/items/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                formStatus.textContent = '✓ Item successfully listed for swap!';
+                formStatus.className = 'status-msg success';
+                addItemForm.reset();
+                fetchItems(); // Refresh items list
+            } else {
+                formStatus.textContent = `✗ ${result.error || 'Failed to create item'}`;
+                formStatus.className = 'status-msg error';
+            }
+        } catch (err) {
+            formStatus.textContent = `✗ Network error: ${err.message}`;
+            formStatus.className = 'status-msg error';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'List Item';
+        }
+    });
+
+    // 4. Search input with debounce
+    let debounceTimer;
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            fetchItems(e.target.value.trim());
+        }, 300);
+    });
+
+    refreshBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        fetchItems();
+    });
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Initial load
+    fetchItems();
+});
+</script>
 {% endblock %}
-
-
-
