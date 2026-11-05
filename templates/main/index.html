@@ -1,0 +1,42 @@
+
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}UniSwap | SDU Swap Market{% endblock %}
+
+{% block content %}
+<main class="hero">
+
+    <div class="language-switch">
+        <a href="#">KZ</a>
+        <a href="#">EN</a>
+        <a href="#">RU</a>
+    </div>
+
+    <header class="header">
+
+        <nav class="nav nav-left">
+            <a href="{% url 'legal' %}">LEGAL</a>
+            <a href="{% url 'help' %}">HELP</a>
+            <a href="{% url 'mail' %}">MAIL</a>
+        </nav>
+
+        <div class="logo">
+            <img src="{% static 'main/images/uniswap-logo.png' %}"
+                 alt="UniSwap Logo">
+        </div>
+
+        <nav class="nav nav-right">
+            <a href="{% url 'search' %}">SEARCH</a>
+            <a href="{% url 'wishlist' %}">WISHLIST</a>
+            <a href="{% url 'account' %}">ACCOUNT</a>
+        </nav>
+
+    </header>
+
+    <div class="hero-content">
+        <h1>GET&GIVE</h1>
+    </div>
+
+</main>
+{% endblock %}
