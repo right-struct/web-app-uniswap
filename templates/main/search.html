@@ -113,9 +113,9 @@
 
 .card {
     background: #ffffff;
-    border-radius: 16px;
+    border-radius: 2px;
     padding: 24px;
-    box-shadow: 0 4px 20px rgba(33, 33, 83, 0.08);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     border: 1px solid #ECEFF1;
 }
 
@@ -134,8 +134,8 @@
 .subtitle code {
     background: #f1f3f4;
     padding: 2px 6px;
-    border-radius: 4px;
-    color: #d66427;
+    border-radius: 2px;
+    color: #F3A367;
 }
 
 .form-group {
@@ -157,7 +157,7 @@
     width: 100%;
     padding: 10px 14px;
     border: 1.5px solid #dcdfe3;
-    border-radius: 10px;
+    border-radius: 2px;
     font-size: 14px;
     transition: border-color 0.2s;
     outline: none;
@@ -174,19 +174,20 @@
     cursor: pointer;
     border: none;
     font-weight: 600;
-    border-radius: 25px;
+    border-radius: 2px;
     padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     transition: 0.2s;
 }
 
 .btn-primary {
-    background: #F3A367;
+    background: #212153;
     color: white;
     width: 100%;
 }
 
 .btn-primary:hover {
-    background: #e49151;
+    background: #191A40;
 }
 
 .btn-secondary {
@@ -195,7 +196,7 @@
 }
 
 .btn-secondary:hover {
-    background: #313175;
+    background: #191A40;
 }
 
 .status-msg {
@@ -204,7 +205,7 @@
     text-align: center;
 }
 
-.status-msg.success { color: #2e7d32; }
+.status-msg.success { color: #212153; font-weight: 600; }
 .status-msg.error { color: #c62828; }
 
 .list-header {
@@ -218,7 +219,7 @@
     color: white;
     font-size: 12px;
     padding: 4px 10px;
-    border-radius: 12px;
+    border-radius: 2px;
 }
 
 .search-bar-wrapper {
@@ -239,14 +240,15 @@
 .item-card {
     padding: 16px;
     background: #F8F9FA;
-    border-radius: 12px;
+    border-radius: 2px;
     border-left: 4px solid #F3A367;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .item-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .item-card-header {

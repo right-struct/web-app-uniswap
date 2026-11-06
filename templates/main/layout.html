@@ -10,11 +10,13 @@
 
     <link rel="stylesheet"
           href="{% static 'main/css/main.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 
     {% block content %}
     {% endblock %}
 
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

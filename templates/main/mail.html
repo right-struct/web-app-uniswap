@@ -1,10 +1,13 @@
-
 {% extends 'main/layout.html' %}
 
-{% block title %}Mail | UniSwap{% endblock %}
+{% block title %}Mail & Contacts | UniSwap SDU{% endblock %}
 
 {% block content %}
-    <h1>Mail</h1>
-    <p>name@sdu.edu.kz</p>
+<div class="content-wrapper">
+    <a href="{% url 'index' %}" class="back-home-link">&larr; Back to Marketplace</a>
+    <h1>Mail & Inquiries</h1>
+    <p>Have questions, suggestions or partnership proposals?</p>
+    <p>Official Contact Email: <strong>uniswap@sdu.edu.kz</strong></p>
+    <p>Telegram Community: <strong>@uniswap_sdu</strong></p>
+</div>
 {% endblock %}
- 

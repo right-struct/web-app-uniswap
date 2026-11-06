@@ -1,10 +1,14 @@
-
 {% extends 'main/layout.html' %}
 
-{% block title %}Account | UniSwap{% endblock %}
+{% block title %}Account | UniSwap SDU{% endblock %}
 
 {% block content %}
-    <h1>Your Account</h1>
-    <p>Name: IDK</p>
-    <p>Username: IDK</p>
+<div class="content-wrapper">
+    <a href="{% url 'index' %}" class="back-home-link">&larr; Back to Marketplace</a>
+    <h1>SDU Student Account</h1>
+    <p>Sign in using your SDU student credentials (@sdu.edu.kz) to manage your listings, swap requests, and profile settings.</p>
+    <div style="margin-top: 20px;">
+        <button type="button" class="btn btn-secondary" style="color: white; background: #212153; padding: 12px 28px; border: none; border-radius: 2px; box-shadow: 0 4px 8px rgba(0,0,0,0.4); font-weight: 600; cursor: pointer;">Sign In with SDU Portal</button>
+    </div>
+</div>
 {% endblock %}

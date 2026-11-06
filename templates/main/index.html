@@ -1,42 +1,149 @@
-
 {% extends 'main/layout.html' %}
 {% load static %}
 
-{% block title %}UniSwap | SDU Swap Market{% endblock %}
+{% block title %}UniSwap SDU - SDU Swap Market{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'main/css/marketplace.css' %}">
+{% endblock %}
 
 {% block content %}
-<main class="hero">
-
-    <div class="language-switch">
-        <a href="#">KZ</a>
-        <a href="#">EN</a>
-        <a href="#">RU</a>
+<div class="container">
+    <!-- Top Right Language Switcher -->
+    <div class="top-lang-wrapper">
+        <div class="lang-switcher">
+            <span>KZ</span>
+            <span>EN</span>
+            <span>RU</span>
+        </div>
     </div>
 
-    <header class="header">
-
-        <nav class="nav nav-left">
+    <!-- Top Navigation Header -->
+    <header class="top-header">
+        <div class="nav-pill-group">
             <a href="{% url 'legal' %}">LEGAL</a>
             <a href="{% url 'help' %}">HELP</a>
             <a href="{% url 'mail' %}">MAIL</a>
-        </nav>
-
-        <div class="logo">
-            <img src="{% static 'main/img/logo.png' %}"
-                 alt="UniSwap Logo">
         </div>
 
-        <nav class="nav nav-right">
+        <div class="nav-pill-group">
             <a href="{% url 'search' %}">SEARCH</a>
-            <a href="{% url 'wishlist' %}">WISHLIST</a>
-            <a href="{% url 'account' %}">ACCOUNT</a>
-        </nav>
-
+            <button type="button" class="js-open-modal">WISHLIST</button>
+            <button type="button" class="js-open-modal">ACCOUNT</button>
+        </div>
     </header>
 
-    <div class="hero-content">
-        <h1>GET&GIVE</h1>
-    </div>
+    <!-- Branding (Exact Logo & Tagline) -->
+    <section class="hero-logo">
+        <img src="{% static 'main/img/logo.png' %}" alt="UniSwap SDU 2026" class="logo-image">
+        <div class="logo-tagline">GET&GIVE</div>
+    </section>
 
-</main>
+    <!-- Search Bar Row -->
+    <section class="search-row">
+        <a href="{% url 'search' %}" class="btn-categories">Categories</a>
+        <div class="search-box">
+            <input type="text" id="marketplaceSearchInput" placeholder="Search by name or description">
+            <button type="button" id="marketplaceSearchBtn" aria-label="Search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="7.5"></circle>
+                    <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+                </svg>
+            </button>
+        </div>
+        <a href="{% url 'search' %}" class="btn-create-post">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+            Create a Post
+        </a>
+    </section>
+
+    <!-- Popular Categories -->
+    <section class="categories-section">
+        <h2 class="categories-title">Popular categories</h2>
+        <div class="categories-grid">
+            <div class="category-item" data-category="books" role="button" tabindex="0">
+                <div class="category-circle">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#F3A367" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                </div>
+                <span class="category-label">Materials</span>
+            </div>
+            <div class="category-item" data-category="electronics" role="button" tabindex="0">
+                <div class="category-circle">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#F3A367" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="2" y1="20" x2="22" y2="20"></line>
+                    </svg>
+                </div>
+                <span class="category-label">Laptops</span>
+            </div>
+            <div class="category-item" data-category="electronics" role="button" tabindex="0">
+                <div class="category-circle">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#F3A367" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="6" y="2" width="12" height="20" rx="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                </div>
+                <span class="category-label">Phones</span>
+            </div>
+            <div class="category-item" data-category="other" role="button" tabindex="0">
+                <div class="category-circle">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="#F3A367">
+                        <circle cx="5" cy="12" r="2.2"/>
+                        <circle cx="12" cy="12" r="2.2"/>
+                        <circle cx="19" cy="12" r="2.2"/>
+                    </svg>
+                </div>
+                <span class="category-label">Other</span>
+            </div>
+            <div class="category-item" data-category="all" role="button" tabindex="0">
+                <div class="category-circle">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#F3A367" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Universal quantifier ∀ (All) -->
+                        <path d="M4 4 L12 20 L20 4"></path>
+                        <line x1="7" y1="12" x2="17" y2="12"></line>
+                    </svg>
+                </div>
+                <span class="category-label">All</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Posts -->
+    <section class="posts-section">
+        <div class="posts-header">
+            <h2 class="posts-title">Latest posts</h2>
+            <div class="filter-pills">
+                <button type="button" class="filter-pill active">All</button>
+                <button type="button" class="filter-pill">Sale</button>
+                <button type="button" class="filter-pill">Swap</button>
+                <button type="button" class="filter-pill">Looking</button>
+                <button type="button" class="filter-pill">Free</button>
+            </div>
+        </div>
+
+        <div class="posts-grid" id="postsContainer">
+            <!-- Dynamically populated from /api/items/ or reference data -->
+        </div>
+    </section>
+</div>
+
+<!-- Modal Component (Exact match to modalPage.png) -->
+<div class="modal-overlay" id="authModal">
+    <div class="modal-card">
+        <button type="button" class="modal-close" id="closeModal" aria-label="Close">&times;</button>
+        <h3 class="modal-title">Authorization is required<br>to add to the wishlist</h3>
+        <a href="{% url 'account' %}" class="btn-signin">Sign In</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'main/js/marketplace.js' %}"></script>
 {% endblock %}

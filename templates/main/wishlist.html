@@ -1,9 +1,12 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Wishlist | UniSwap{% endblock %}
+{% block title %}Wishlist | UniSwap SDU{% endblock %}
 
 {% block content %}
-    <h1>Wishlist</h1>
-    <p>Empty.</p>
+<div class="content-wrapper">
+    <a href="{% url 'index' %}" class="back-home-link">&larr; Back to Marketplace</a>
+    <h1>Your Wishlist</h1>
+    <p>Saved swap items and wishlists will be synchronized here once you sign in with your SDU student account.</p>
+    <a href="{% url 'account' %}" class="btn btn-secondary" style="display:inline-block; margin-top: 10px; color: white; background: #212153; padding: 10px 24px; text-decoration: none; border-radius: 2px;">Sign In with SDU ID</a>
+</div>
 {% endblock %}
- 

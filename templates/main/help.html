@@ -1,8 +1,13 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Help page | UniSwap{% endblock %}
+{% block title %}Help & FAQ | UniSwap SDU{% endblock %}
 
 {% block content %}
-    <h1>Do you need any help?</h1>
-    <p>Go study coding</p>
+<div class="content-wrapper">
+    <a href="{% url 'index' %}" class="back-home-link">&larr; Back to Marketplace</a>
+    <h1>Help & Support</h1>
+    <p><strong>How to list an item:</strong> Go to the Search/Post page or click "+ Create a Post" on the home page and fill out the details.</p>
+    <p><strong>How to contact a seller:</strong> Click on any listing or copy the Telegram username / SDU email provided in the description.</p>
+    <p>If you experience any technical issues, please contact the UniSwap SDU support team via the Mail page.</p>
+</div>
 {% endblock %}
