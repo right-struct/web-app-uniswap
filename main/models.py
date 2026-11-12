@@ -15,10 +15,11 @@ class Item(models.Model):
 
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, default='')
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='other')
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='other', db_index=True)
     contact = models.CharField(max_length=150, help_text="Telegram username or SDU student email")
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -33,6 +34,7 @@ class Item(models.Model):
             'contact': self.contact,
             'is_available': self.is_available,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S') if hasattr(self, 'updated_at') else None,
         }
 
     def __str__(self):

@@ -1,6 +1,4 @@
 /* ==========================================================================
-   UniSwap SDU - Marketplace Stylesheet
-   Faithful 1-to-1 implementation of Figma Reference (instanceWithShadowsNoAuth.png & modalPage.png)
    Strict Palette:
      - Primary Blue:   #212153
      - Primary Orange: #F3A367
@@ -8,7 +6,6 @@
      - White:          #FFFFFF
      - Card / Nav:     #212153
      - Shadows:        0px 4px 8px rgba(0, 0, 0, 0.4)
-   Note: Crisp rectangular geometry (border-radius: 2px), NO pill roundings.
    ========================================================================== */
 
 :root {
@@ -56,7 +53,7 @@ a {
 }
 
 /* ------------------------------------------
-   1. LANGUAGE SWITCHER (Top Right)
+   LANGUAGE SWITCHER (Top Right)
    ------------------------------------------ */
 .top-lang-wrapper {
   display: flex;
@@ -87,7 +84,7 @@ a {
 }
 
 /* ------------------------------------------
-   2. TOP NAVIGATION HEADER
+   TOP NAVIGATION HEADER
    ------------------------------------------ */
 .top-header {
   display: flex;
@@ -123,7 +120,7 @@ a {
 }
 
 /* ------------------------------------------
-   3. HERO LOGO & BRANDING
+  HERO LOGO & BRANDING
    ------------------------------------------ */
 .hero-logo {
   text-align: center;
@@ -148,7 +145,7 @@ a {
 }
 
 /* ------------------------------------------
-   4. SEARCH ROW
+  SEARCH ROW
    ------------------------------------------ */
 .search-row {
   display: flex;
@@ -224,7 +221,7 @@ a {
 }
 
 /* ------------------------------------------
-   5. POPULAR CATEGORIES SECTION
+  POPULAR CATEGORIES SECTION
    ------------------------------------------ */
 .categories-section {
   background-color: var(--primary-blue);
@@ -284,7 +281,7 @@ a {
 }
 
 /* ------------------------------------------
-   6. LATEST POSTS
+  LATEST POSTS
    ------------------------------------------ */
 .posts-header {
   margin-bottom: 18px;
@@ -401,7 +398,7 @@ a {
 }
 
 /* ------------------------------------------
-   7. AUTHORIZATION MODAL (modalPage.png)
+  AUTHORIZATION MODAL (modalPage.png)
    ------------------------------------------ */
 .modal-overlay {
   position: fixed;
@@ -481,7 +478,7 @@ a {
 }
 
 /* ------------------------------------------
-   8. RESPONSIVE BREAKPOINTS
+  RESPONSIVE BREAKPOINTS
    ------------------------------------------ */
 @media (max-width: 1024px) {
   .posts-grid {

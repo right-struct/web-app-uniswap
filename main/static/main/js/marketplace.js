@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentCategory = '';
   let currentSearch = '';
 
-  // 1. Mock item HTML to match Figma reference if database has no items yet
+  // Mock item HTML to match Figma reference if database has no items yet
   const mockItems = [
     {
       title: 'iPad 2022 идеальное состояние братишка отвечаю самсой и полно...',
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
   }
 
-  // 2. Fetch items from Django backend API
+  // Fetch items from Django backend API
   async function loadItems() {
     if (!postsContainer) return;
 
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // 3. Search handling
+  // Search handling
   function triggerSearch() {
     if (searchInput) {
       currentSearch = searchInput.value.trim();
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // 4. Category and Pill filtering
+  // Category and Pill filtering
   filterPills.forEach(pill => {
     pill.addEventListener('click', function () {
       filterPills.forEach(p => p.classList.remove('active'));
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // 5. Modal Logic (Open / Close)
+  // Modal Logic (Open / Close)
   document.addEventListener('click', function (e) {
     const trigger = e.target.closest('.js-open-modal');
     if (trigger && authModal) {

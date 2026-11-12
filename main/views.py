@@ -94,7 +94,10 @@ def api_items(request):
         except json.JSONDecodeError:
             return JsonResponse({'success': False, 'error': 'Invalid JSON body.'}, status=400)
         except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error creating item: {e}", exc_info=True)
+            return JsonResponse({'success': False, 'error': 'Internal server error. Please try again.'}, status=500)
 
     else:
         return JsonResponse(
