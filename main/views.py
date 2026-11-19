@@ -37,14 +37,8 @@ def account(request):
     return render(request, 'main/account.html', {'profile': getattr(request.user, 'profile', None) if request.user.is_authenticated else None, 'form': EmailAuthenticationForm(request), 'next': request.GET.get('next', '')})
 
 
-# HTTP-based REST API for Swap Items
 
 def api_items(request):
-    """
-    HTTP API endpoint for UniSwap Item resources.
-    - GET  /api/items/ : List all available swap items (supports ?search= and ?category=)
-    - POST /api/items/ : Create a new swap item (accepts JSON payload)
-    """
     if request.method == 'GET':
         query = request.GET.get('search', '').strip()
         category = request.GET.get('category', '').strip()
