@@ -1,237 +1,116 @@
-# 🔄 UniSwap SDU — Платформа студенческого обмена
+# UniSwap SDU
 
-**UniSwap SDU** — это веб-платформа, созданная для студентов университета SDU (Сулейман Демирель), позволяющая удобно и быстро обмениваться учебными материалами, книгами, конспектами, гаджетами и вещами внутри университетского кампуса.
+Платформа студенческого обмена SDU на Django. Проект использует Django Templates, PostgreSQL (по `DATABASE_URL`) и приложение `main` для объявлений и профилей пользователей.
 
-Проект построен на **Python/Django** с удалённой базой данных **PostgreSQL** в облаке Neon и адаптивным веб-интерфейсом.
+> **Тестовые данные для разработки.** Эти общедоступные учётные данные нельзя использовать в production. После разработки удалите тестовые аккаунты или замените их пароли.
 
----
+| Username | Email | Password | Role |
+|---|---|---|---|
+| test_user | test.user@sdu.edu.kz | TestUser_2026! | regularUser |
+| test_moderator | test.moderator@sdu.edu.kz | TestMod_2026! | moderator |
+| test_admin | test.admin@sdu.edu.kz | TestAdmin_2026! | admin |
 
-## 🏗 Архитектура и структура проекта
+Проверено в основной PostgreSQL `neondb`: все записи активны, пароли проходят `check_password()`, роли соответствуют таблице. `test_admin` не является Django superuser и не имеет `is_staff`.
 
-Проект использует архитектуру **MVT (Model-View-Template)** с встроенным HTTP REST API для обмена данными между клиентом и сервером:
+## Возможности и ограничения реализации
 
-```text
-uni-swap/
-├── manage.py                  # Главная консольная утилита управления Django
-├── requirements.txt           # Список необходимых библиотек и зависимостей
-├── .gitignore                 # Исключение мусорных и временных файлов из Git
-├── README.md                  # Данная документация
-│
-├── uni_swap/                  # Глобальная конфигурация проекта
-│   ├── settings.py            # Настройки: подключение к Neon PostgreSQL, статика, приложения
-│   ├── urls.py                # Главный URL-маршрутизатор
-│   └── wsgi.py / asgi.py      # Точки входа для веб-серверов
-│
-├── main/                      # Основное приложение платформы
-│   ├── models.py              # Модель данных Item (вещь для обмена)
-│   ├── views.py               # Контроллеры страниц и REST API (GET, POST)
-│   ├── urls.py                # Маршруты страниц (/search/, /account/) и API (/api/items/)
-│   ├── admin.py               # Регистрация модели в панели администратора Django
-│   ├── migrations/            # История миграций базы данных
-│   └── static/main/           # Статические ресурсы (CSS, JS, изображения)
-│       ├── css/main.css       # Стили интерфейса (цветовая палитра, тени, адаптив)
-│       ├── img/               # Логотипы и фоновые изображения
-│       └── js/                # Скрипты клиентской логики
-│
-└── templates/main/            # HTML-шаблоны
-    ├── layout.html            # Базовый каркас (наследование через Jinja/DTL)
-    ├── index.html             # Главная страница (Hero, навигация, логотип)
-    └── search.html            # Интерактивная страница поиска и публикации вещей
-```
+- Публичной регистрации нет. Вход только по email и паролю, выход через Django auth views, сессии и CSRF.
+- Пароли хешируются Django. Rate limit ограничивает попытки по email/IP; используется локальный cache по умолчанию, Redis можно включить через `REDIS_CACHE_URL`.
+- Email для обычных пользователей должен иметь домен `sdu.edu.kz` или `stu.sdu.edu.kz` при создании через управляемую форму. База гарантирует непустой email и уникальность без учёта регистра.
+- Роли лежат в `main_userprofile`. Назначение выполняет сервер/администратор. `regularUser` управляет своими объявлениями; moderator/admin могут также удалять чужие. `admin` в UniSwap не означает `is_staff`/доступ к Django Admin.
+- Объявления публично читаются. API поддерживает создание (сессия требуется), обновление владельцем и soft-delete владельцем или moderator/admin. Интерфейс главной страницы получает реальные карточки из API; полноценные формы создания/редактирования и отдельная HTML-страница деталей пока не реализованы.
+- Wishlist, публичное управление избранным, пагинация, полная модераторская панель сайта и уведомления не реализованы.
 
----
+## Модели и база
 
-## ⚡ Пошаговая инструкция по запуску с нуля
+PostgreSQL подключается из `.env` через `DATABASE_URL`; секреты в README не хранятся. При отсутствии переменной настройки переключаются на локальную `db.sqlite3`, но основная база проекта — PostgreSQL.
 
-### 1. Предварительные требования
-Убедитесь, что на компьютере установлен **Python 3.10** или новее:
+| Таблица | Назначение |
+|---|---|
+| `auth_user` | Стандартная Django User: username, email, password hash, активность и Django permissions flags. Email ограничен уникальным индексом на `LOWER(email)` и проверкой непустого значения. |
+| `main_userprofile` | Связь OneToOne с `auth_user`, роль `regularUser` / `moderator` / `admin`, даты создания и изменения профиля. |
+| `main_item` | Объявление: title, description, category, contact, listing_type, price, image, owner, is_available, created_at, updated_at. `owner_id` — nullable FK к `auth_user`, старые объявления без владельца допустимы. |
+| `django_session` | Серверные сессии Django. |
+| `auth_group`, `auth_permission`, `auth_user_groups`, `auth_user_user_permissions` | Стандартные группы и разрешения Django. |
+| `django_content_type`, `django_admin_log`, `django_migrations` | Служебные таблицы Django. |
+
+Категории — фиксированные choices: `books`, `electronics`, `clothing`, `services`, `other`. Типы — choices `Sale`, `Swap`, `Looking`, `Free`. Отдельные таблицы не нужны, пока справочники фиксированы; оба значения хранятся в строковых полях `main_item.category` и `main_item.listing_type`.
+
+Фотография одна на объявление, поле `image` — ImageField до 5 MiB, формат проверяется сервером. Файлы сохраняются в `MEDIA_ROOT` (по умолчанию каталог `media/`) и выдаются по `MEDIA_URL=/media/`. Для production раздачу медиа следует настроить на веб-сервере или объектном хранилище.
+
+Миграции `main`: `0001_initial`, `0002_item_updated_at_alter_item_category`, `0003_item_owner_userprofile`, `0004_user_email_constraints`, `0005_item_image_item_listing_type_item_price`.
+
+## API
+
+Ответы JSON. `GET` публичен; изменяющие методы требуют Django session и CSRF-токен. Для JSON POST/PUT/PATCH передавайте `X-CSRFToken`.
+
+| Метод | URL | Назначение / доступ |
+|---|---|---|
+| GET | `/api/items/` | Список доступных объявлений; параметры `search`, `category`, `type`. |
+| POST | `/api/items/` | Создать объявление; авторизация обязательна. Поля: `title`, `description`, `category`, `contact`, `type`, `price`, опционально файл `image` (multipart). |
+| GET | `/api/items/<id>/` | Детали объявления, публично. |
+| PUT, PATCH | `/api/items/<id>/` | Обновить объявление владельцу; JSON-поля `title`, `description`, `contact`, `category`, `type`, `price`. |
+| DELETE | `/api/items/<id>/` | Пометить объявление недоступным; владелец или moderator/admin. Это soft-delete, строка сохраняется. |
+
+Формат списка: `{success, count, items}`; одиночное объявление: `{success, item}`. Ошибки возвращают `{success: false, error}` и HTTP-статус. Объявления с `owner=NULL` нельзя редактировать обычному пользователю; moderator/admin может сделать их недоступными.
+
+## Страницы и URL
+
+`/`, `/search/`, `/account/`, `/wishlist/`, `/legal/`, `/help/`, `/mail/`; вход `/auth/login/`, выход `/auth/logout/`; Django Admin `/admin/`.
+
+## Запуск
+
+1. Клонируйте репозиторий и перейдите в каталог проекта.
+2. Создайте окружение и установите зависимости:
+
 ```bash
-python3 --version
-```
-
-### 2. Клонирование и переход в папку проекта
-```bash
-cd uni-swap
-```
-*(Убедитесь, что вы находитесь в папке, где лежит файл `manage.py`)*
-
-### 3. Создание и активация виртуального окружения
-* **Linux / macOS:**
-  ```bash
-  python3 -m venv .venv
-  source .venv/bin/activate
-  ```
-* **Windows (PowerShell):**
-  ```powershell
-  python -m venv .venv
-  .\.venv\Scripts\Activate.ps1
-  ```
-*(После активации в начале строки терминала появится `(.venv)`)*
-
-### 4. Установка зависимостей
-```bash
+python3 -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
-В проект включены:
-* `Django` — веб-фреймворк
-* `dj-database-url` — парсер строки подключения БД
-* `psycopg[binary]` — современный и быстрый драйвер PostgreSQL
 
-### 5. Применение миграций базы данных
-База данных уже настроена на облачный PostgreSQL (Neon):
+3. Создайте `.env` рядом с `manage.py`, не добавляя его в Git:
+
+```dotenv
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require
+DJANGO_SECRET_KEY=replace-with-a-long-random-secret
+DJANGO_DEBUG=True
+DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
+# необязательно для общей защиты при нескольких workers:
+# REDIS_CACHE_URL=redis://localhost:6379/1
+```
+
+4. Создайте PostgreSQL базу и задайте корректные секреты в `.env`. Не публикуйте строку подключения или `DJANGO_SECRET_KEY`.
+5. Примените миграции и создайте администратора Django:
+
 ```bash
 python manage.py migrate
-```
-
-### 6. Запуск сервера разработки
-```bash
-python manage.py runserver
-```
-
-Теперь откройте в браузере:  
-👉 **Главная страница:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/)  
-👉 **Поиск:** [http://127.0.0.1:8000/search/](http://127.0.0.1:8000/search/)  
-👉 **Панель администратора:** [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
-
----
-
-## 📡 Документация HTTP REST API
-
-Проект предоставляет готовый REST API для взаимодействия клиента (браузера, мобильного приложения или сторонних сервисов) с сервером.
-
-### Эндпоинты
-
-| Метод | URL | Описание | Формат тела |
-|---|---|---|---|
-| **GET** | `/api/items/` | Получить список всех активных вещей для обмена | Query-параметры: `?search=...`, `?category=...` |
-| **POST** | `/api/items/` | Опубликовать новую вещь для обмена | JSON |
-| **GET** | `/api/items/<id>/` | Получить подробную информацию о конкретной вещи | — |
-| **DELETE**| `/api/items/<id>/` | Отметить вещь как обменянную / недоступную | — |
-
----
-
-### Примеры запросов к API
-
-#### 1. Получить список вещей (GET)
-* **cURL:**
-  ```bash
-  curl http://127.0.0.1:8000/api/items/
-  ```
-* **JavaScript (fetch в браузере):**
-  ```javascript
-  const response = await fetch('/api/items/?search=Calculus');
-  const data = await response.json();
-  console.log(data.items);
-  ```
-* **Пример ответа (200 OK):**
-  ```json
-  {
-    "success": true,
-    "count": 1,
-    "items": [
-      {
-        "id": 1,
-        "title": "Calculus 8th Edition by Stewart",
-        "description": "Good condition, want to swap for Discrete Math",
-        "category": "books",
-        "category_display": "Books & Notes",
-        "contact": "@sdu_alex",
-        "is_available": true,
-        "created_at": "2026-11-05 09:32:36"
-      }
-    ]
-  }
-  ```
-
-#### 2. Добавить новую вещь (POST)
-* **cURL:**
-  ```bash
-  curl -X POST http://127.0.0.1:8000/api/items/ \
-    -H "Content-Type: application/json" \
-    -d '{
-      "title": "Scientific Calculator Casio fx-991",
-      "category": "electronics",
-      "contact": "@sdu_student",
-      "description": "Perfect for physics and exam sessions."
-    }'
-  ```
-* **JavaScript (fetch):**
-  ```javascript
-  const res = await fetch('/api/items/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      title: 'SDU Hoodie Size M',
-      category: 'clothing',
-      contact: 'student@sdu.edu.kz',
-      description: 'Navy blue hoodie, swap for size L'
-    })
-  });
-  const result = await res.json();
-  ```
-* **Пример ответа (201 Created):**
-  ```json
-  {
-    "success": true,
-    "item": {
-      "id": 2,
-      "title": "Scientific Calculator Casio fx-991",
-      "category": "electronics",
-      "category_display": "Electronics & Gadgets",
-      "contact": "@sdu_student",
-      "description": "Perfect for physics and exam sessions.",
-      "is_available": true,
-      "created_at": "2026-11-05 09:35:10"
-    }
-  }
-  ```
-
----
-
-## 🛠 Руководство по решению проблем (Troubleshooting)
-
-### 1. «Error: That port is already in use» (Порт 8000 занят)
-* **Причина:** Другой процесс (предыдущий запуск Django или другая программа) уже слушает порт `8000`.
-* **Решение 1:** Запустите Django на другом свободном порту (например, `8080` или `8001`):
-  ```bash
-  python manage.py runserver 8080
-  ```
-* **Решение 2 (Linux):** Найти и завершить процесс:
-  ```bash
-  fuser -k 8000/tcp
-  ```
-
-### 2. Ошибки подключения к базе данных Neon (PostgreSQL connection timeout / drops)
-* **Причина:** Облачный сервис Neon переводит неактивные базы данных в спящий режим для экономии ресурсов. Первый запрос после простоя может занять 2–4 секунды («холодный старт»).
-* **Решение:**
-  * Убедитесь, что у вас есть стабильное интернет-соединение.
-  * Параметр `sslmode=require` обязателен (он уже включён в настройку `settings.py`).
-  * Если нужно локально переопределить строку подключения, создайте системную переменную `DATABASE_URL`:
-    ```bash
-    export DATABASE_URL="postgresql://user:pass@host/dbname?sslmode=require"
-    ```
-
-### 3. Ошибка «./.venv/bin/python: Нет такого файла или каталога»
-* **Причина:** Папка `.venv` была скопирована с другого компьютера. Внутри `.venv` пути к Python захардкожены абсолютными путями создателя.
-* **Решение:** Удалите старую папку и пересоздайте её:
-  ```bash
-  rm -rf .venv
-  python3 -m venv .venv
-  source .venv/bin/activate
-  pip install -r requirements.txt
-  ```
-
-### 4. Картинки или стили не обновляются в браузере
-* **Причина:** Браузер закэшировал старую версию CSS или картинок.
-* **Решение:** Нажмите `Ctrl + F5` (или `Cmd + Shift + R` на Mac) для полной перезагрузки страницы со сбросом кэша.
-
-### 5. Создание суперпользователя для панели администратора
-Чтобы заходить в админку ([http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)) и управлять вещами вручную:
-```bash
 python manage.py createsuperuser
 ```
-Введите имя, email и пароль.
 
----
+6. При необходимости создать отсутствующие тестовые аккаунты запустите `python manage.py ensure_test_accounts`. Команда запросит пароли интерактивно и не перезаписывает существующие учётные данные.
+7. Запустите сервер: `python manage.py runserver`.
+8. Сайт: http://127.0.0.1:8000/ ; Django Admin: http://127.0.0.1:8000/admin/ .
 
-Разработано для студентов SDU 🎓
+Тесты с отдельной SQLite базой запускаются командой:
+
+```bash
+DJANGO_TEST_SQLITE=1 python manage.py test
+```
+
+## Структура проекта
+
+```text
+manage.py
+requirements.txt
+.env                         # локальные секреты, не коммитить
+uni_swap/                    # settings.py, urls.py, ASGI/WSGI
+main/                        # модели, views, forms, auth backend, admin, tests
+main/migrations/             # история схемы
+main/management/commands/    # ensure_test_accounts
+main/static/main/             # CSS, JavaScript, изображения интерфейса
+templates/main/               # Django HTML-шаблоны
+media/                        # пользовательские изображения (создаётся при загрузке)
+```
+
+Зависимости включают Django 5.2, `dj-database-url`, `psycopg`, `python-dotenv` и Pillow.
