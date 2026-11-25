@@ -1,27 +1,394 @@
 {% extends 'main/layout.html' %}
+{% load static %}
 
 {% block title %}Account | UniSwap SDU{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'main/css/marketplace.css' %}">
+<style>
+.auth-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.auth-logo {
+    width: 180px;
+    height: auto;
+    margin-bottom: 16px;
+}
+
+.auth-title {
+    font-size: 28px;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--primary-blue);
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    font-size: 14px;
+    color: #666;
+}
+
+.auth-card {
+    background: var(--white);
+    border-radius: 2px;
+    padding: 32px;
+    box-shadow: var(--shadow-figma);
+    margin-bottom: 20px;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 28px;
+    border-bottom: 2px solid var(--primary-blue);
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.auth-tab.active {
+    color: var(--white);
+    background: var(--primary-blue);
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #dcdfe3;
+    border-radius: 2px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-orange);
+}
+
+.form-group input.error {
+    border-color: #c62828;
+}
+
+.form-error {
+    font-size: 12px;
+    color: #c62828;
+    margin-top: 6px;
+}
+
+.form-error-banner {
+    background: #ffebee;
+    border-left: 4px solid #c62828;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #c62828;
+    border-radius: 2px;
+}
+
+.btn-auth {
+    width: 100%;
+    background: var(--primary-blue);
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px 24px;
+    border-radius: 2px;
+    box-shadow: var(--shadow-figma);
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s;
+}
+
+.btn-auth:hover {
+    opacity: 0.9;
+}
+
+.btn-auth:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #666;
+}
+
+.auth-footer a {
+    color: var(--primary-orange);
+    font-weight: 600;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Logged in state */
+.user-info {
+    text-align: center;
+}
+
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    background: var(--primary-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 40px;
+    color: var(--white);
+    font-weight: 600;
+}
+
+.user-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin-bottom: 8px;
+}
+
+.user-email {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.user-role {
+    font-size: 13px;
+    color: var(--primary-orange);
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+.btn-logout {
+    background: transparent;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    padding: 12px 32px;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    background: var(--primary-blue);
+    color: var(--white);
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.back-link:hover {
+    opacity: 0.8;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--primary-blue);
+    color: var(--white);
+    border-radius: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    margin-bottom: 20px;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.back-btn:hover {
+    opacity: 0.9;
+    transform: translateX(-2px);
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="content-wrapper">
-    <a href="{% url 'index' %}" class="back-home-link">&larr; Back to Marketplace</a>
-    <h1>SDU Student Account</h1>
+<div class="auth-container">
+    <a href="{% url 'index' %}" class="back-btn" title="Back to Marketplace">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+    </a>
+    
+    <div class="auth-header">
+        <img src="{% static 'main/img/logo.png' %}" alt="UniSwap SDU" class="auth-logo">
+    </div>
+
     {% if user.is_authenticated %}
-        <h2>{{ user.get_full_name|default:user.username }}</h2>
-        <p>{{ user.email }}</p>
-        {% if profile %}<p>Role: {{ profile.get_role_display }}</p>{% endif %}
-        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Log out</button></form>
+        <!-- Logged In State -->
+        <div class="auth-card">
+            <div class="user-info">
+                <div class="user-avatar">{{ user.username|slice:":1"|upper }}</div>
+                <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+                <div class="user-email">{{ user.email }}</div>
+                {% if profile %}
+                    <div class="user-role">{{ profile.get_role_display }}</div>
+                {% endif %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Log Out</button>
+                </form>
+            </div>
+        </div>
     {% else %}
-        <p>Sign in with your pre-created SDU account.</p>
-        {% if form.errors %}<p role="alert">Email or password is incorrect, or the account is inactive.</p>{% endif %}
-        <form method="post" action="{% url 'login' %}">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <label for="id_username">Email</label>{{ form.username }}{{ form.username.errors }}
-            <label for="id_password">Password</label>{{ form.password }}{{ form.password.errors }}
-            <input type="hidden" name="next" value="{{ next }}">
-            <button type="submit">Sign In</button>
-        </form>
+        <!-- Login/Register Forms -->
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab active" data-tab="login">SIGN IN</button>
+                <button type="button" class="auth-tab" data-tab="register">SIGN UP</button>
+            </div>
+
+            <!-- Login Form -->
+            <form method="post" action="{% url 'login' %}" class="auth-form active" id="loginForm">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="form-error-banner" {% if message.tags == 'success' %}style="background: #e8f5e9; border-color: #4caf50; color: #2e7d32;"{% endif %}>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                {% if form.errors %}
+                    <div class="form-error-banner">
+                        Email or password is incorrect, or the account is inactive.
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="id_username">Email</label>
+                    <input type="email" name="username" id="id_username" placeholder="student@sdu.edu.kz" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <input type="password" name="password" id="id_password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn-auth">Sign In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form method="post" action="{% url 'register' %}" class="auth-form" id="registerForm">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_reg_name">Full Name</label>
+                    <input type="text" name="name" id="id_reg_name" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_reg_email">Email</label>
+                    <input type="email" name="email" id="id_reg_email" placeholder="student@sdu.edu.kz" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_reg_password">Password</label>
+                    <input type="password" name="password" id="id_reg_password" placeholder="Minimum 8 characters" required minlength="8">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_reg_password2">Confirm Password</label>
+                    <input type="password" name="password2" id="id_reg_password2" placeholder="Repeat your password" required>
+                </div>
+
+                <button type="submit" class="btn-auth">Create Account</button>
+            </form>
+        </div>
+
+        <div class="auth-footer">
+            <p>Only SDU students with pre-created accounts can sign in.</p>
+        </div>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.auth-tab');
+    const forms = document.querySelectorAll('.auth-form');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-tab');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            forms.forEach(form => {
+                form.classList.remove('active');
+                if (form.id === targetTab + 'Form') {
+                    form.classList.add('active');
+                }
+            });
+        });
+    });
+
+    // Password confirmation validation
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            const password = document.getElementById('id_reg_password').value;
+            const password2 = document.getElementById('id_reg_password2').value;
+            
+            if (password !== password2) {
+                e.preventDefault();
+                alert('Passwords do not match.');
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

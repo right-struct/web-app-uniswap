@@ -1,12 +1,1057 @@
 {% extends 'main/layout.html' %}
+{% load static %}
 
 {% block title %}Legal | UniSwap SDU{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'main/css/marketplace.css' %}">
+<style>
+.legal-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.legal-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.legal-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 16px;
+}
+
+.legal-title {
+    font-size: 32px;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--primary-blue);
+    margin-bottom: 8px;
+}
+
+.legal-subtitle {
+    font-size: 14px;
+    color: #666;
+}
+
+.last-updated {
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 24px;
+    font-size: 14px;
+}
+
+.back-link:hover {
+    opacity: 0.8;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--primary-blue);
+    color: var(--white);
+    border-radius: 2px;
+    box-shadow: var(--shadow-figma);
+    margin-bottom: 24px;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.back-btn:hover {
+    opacity: 0.9;
+    transform: translateX(-2px);
+}
+
+/* Language Tabs */
+.legal-lang-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 20px;
+}
+
+.lang-tab {
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 2px;
+    cursor: pointer;
+    border: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.lang-tab.active {
+    opacity: 1;
+    box-shadow: var(--shadow-figma);
+}
+
+/* Section Tabs */
+.legal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    background: var(--primary-blue);
+    padding: 4px;
+    border-radius: 2px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-figma);
+}
+
+.legal-nav-btn {
+    background: transparent;
+    color: var(--white);
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.legal-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.legal-nav-btn.active {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* Content Card */
+.legal-card {
+    background: var(--white);
+    border-radius: 2px;
+    padding: 40px;
+    box-shadow: var(--shadow-figma);
+}
+
+.legal-section {
+    display: none;
+}
+
+.legal-section.active {
+    display: block;
+}
+
+.legal-section-title {
+    font-size: 24px;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--primary-blue);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary-orange);
+}
+
+.legal-content {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+}
+
+.legal-content h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.legal-content p {
+    margin-bottom: 16px;
+}
+
+.legal-content ul {
+    margin-bottom: 16px;
+    padding-left: 24px;
+}
+
+.legal-content li {
+    margin-bottom: 8px;
+}
+
+.legal-content a {
+    color: var(--primary-orange);
+    font-weight: 600;
+}
+
+.legal-content a:hover {
+    text-decoration: underline;
+}
+
+.highlight-box {
+    background: #f8f9fa;
+    border-left: 4px solid var(--primary-orange);
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-radius: 2px;
+}
+
+.highlight-box.warning {
+    border-left-color: #f44336;
+    background: #ffebee;
+}
+
+.highlight-box.info {
+    border-left-color: var(--primary-blue);
+}
+
+.contact-info {
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 24px;
+    border-radius: 2px;
+    margin-top: 30px;
+}
+
+.contact-info h4 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.contact-info p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .legal-card {
+        padding: 24px;
+    }
+    
+    .legal-nav {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+    
+    .legal-nav-btn {
+        white-space: nowrap;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="content-wrapper">
-    <a href="{% url 'index' %}" class="back-home-link">&larr; Back to Marketplace</a>
-    <h1>Legal Information</h1>
-    <p>UniSwap SDU is a student-to-student exchange platform designed exclusively for SDU University students.</p>
-    <p>All items, transactions, and agreements are negotiated directly between students. Please adhere to university community guidelines.</p>
+<div class="legal-container">
+    <a href="{% url 'index' %}" class="back-btn" title="Back to Marketplace">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+    </a>
+    
+    <div class="legal-header">
+        <img src="{% static 'main/img/logo.png' %}" alt="UniSwap SDU" class="legal-logo">
+        <h1 class="legal-title">Legal Information</h1>
+        <p class="legal-subtitle">Terms, Policies & Guidelines</p>
+        <p class="last-updated">Last updated: January 15, 2026</p>
+    </div>
+
+    <!-- Language Tabs -->
+    <div class="legal-lang-tabs">
+        <button class="lang-tab active" data-lang="en">EN</button>
+        <button class="lang-tab" data-lang="ru">RU</button>
+        <button class="lang-tab" data-lang="kz">KZ</button>
+    </div>
+
+    <!-- Section Navigation -->
+    <div class="legal-nav">
+        <button class="legal-nav-btn active" data-section="terms">TERMS OF SERVICE</button>
+        <button class="legal-nav-btn" data-section="privacy">PRIVACY POLICY</button>
+        <button class="legal-nav-btn" data-section="user">USER AGREEMENT</button>
+        <button class="legal-nav-btn" data-section="cookies">COOKIES</button>
+        <button class="legal-nav-btn" data-section="copyright">COPYRIGHT</button>
+    </div>
+
+    <div class="legal-card">
+        <!-- Terms of Service -->
+        <div class="legal-section active" id="terms">
+            <h2 class="legal-section-title">Terms of Service</h2>
+            <div class="legal-content" data-lang="en">
+                <div class="highlight-box info">
+                    <strong>Important:</strong> By using UniSwap SDU, you agree to these terms. Please read them carefully.
+                </div>
+                
+                <h3>1. Acceptance of Terms</h3>
+                <p>Welcome to UniSwap SDU, a student-to-student exchange platform operated for the Suleyman Demirel University community. By accessing or using our platform, you agree to be bound by these Terms of Service and all applicable laws and regulations.</p>
+                
+                <h3>2. Eligibility</h3>
+                <p>To use UniSwap SDU, you must:</p>
+                <ul>
+                    <li>Be a currently enrolled student, faculty member, or staff at Suleyman Demirel University</li>
+                    <li>Have a valid @sdu.edu.kz or @stu.sdu.edu.kz email address</li>
+                    <li>Be at least 18 years of age</li>
+                    <li>Provide accurate and complete registration information</li>
+                </ul>
+                
+                <h3>3. User Responsibilities</h3>
+                <p>As a user of UniSwap SDU, you agree to:</p>
+                <ul>
+                    <li>Provide accurate information about items you list for exchange or sale</li>
+                    <li>Only list items that you legally own and have the right to transfer</li>
+                    <li>Not post illegal, harmful, offensive, or misleading content</li>
+                    <li>Complete transactions in good faith and as agreed with other users</li>
+                    <li>Report any violations or suspicious activity to platform administrators</li>
+                </ul>
+                
+                <h3>4. Prohibited Activities</h3>
+                <p>The following activities are strictly prohibited on UniSwap SDU:</p>
+                <ul>
+                    <li>Listing stolen, counterfeit, or illegal items</li>
+                    <li>Academic dishonesty materials (cheat sheets, stolen exam papers, etc.)</li>
+                    <li>Weapons, drugs, alcohol, or tobacco products</li>
+                    <li>Harassment, discrimination, or harmful behavior toward other users</li>
+                    <li>Spam, phishing, or fraudulent schemes</li>
+                    <li>Commercial resale of university-licensed materials</li>
+                </ul>
+                
+                <div class="highlight-box warning">
+                    <strong>Violation Warning:</strong> Users found violating these terms may have their accounts suspended or permanently banned from the platform.
+                </div>
+                
+                <h3>5. Transactions & Payments</h3>
+                <p>UniSwap SDU serves as a connection platform only. All transactions are conducted directly between users. We do not:</p>
+                <ul>
+                    <li>Process payments or handle money</li>
+                    <li>Guarantee the quality, safety, or legality of items</li>
+                    <li>Mediate disputes between users</li>
+                    <li>Provide insurance or protection for transactions</li>
+                </ul>
+                
+                <h3>6. Intellectual Property</h3>
+                <p>All content on UniSwap SDU, including logos, designs, and text, is the property of SDU University. User-generated content remains the property of the respective users, who grant UniSwap SDU a non-exclusive license to display such content on the platform.</p>
+                
+                <h3>7. Limitation of Liability</h3>
+                <p>UniSwap SDU and SDU University are not liable for:</p>
+                <ul>
+                    <li>Any direct or indirect damages arising from user transactions</li>
+                    <li>Loss of data, profits, or business opportunities</li>
+                    <li>Actions of third parties or other users</li>
+                    <li>Temporary unavailability of the platform</li>
+                </ul>
+                
+                <h3>8. Modifications</h3>
+                <p>We reserve the right to modify these terms at any time. Users will be notified of significant changes via email or platform announcement. Continued use of the platform constitutes acceptance of modified terms.</p>
+                
+                <h3>9. Termination</h3>
+                <p>We may suspend or terminate your access to UniSwap SDU at any time, without prior notice, for conduct that we believe violates these Terms or is harmful to other users, us, or third parties, or for any other reason.</p>
+            </div>
+            
+            <!-- Russian Version -->
+            <div class="legal-content" data-lang="ru" style="display: none;">
+                <div class="highlight-box info">
+                    <strong>Важно:</strong> Используя UniSwap SDU, вы соглашаетесь с этими условиями. Пожалуйста, внимательно прочитайте их.
+                </div>
+                
+                <h3>1. Принятие условий</h3>
+                <p>Добро пожаловать на UniSwap SDU — платформу для обмена между студентами Университета Сулеймана Демиреля. Используя нашу платформу, вы соглашаетесь соблюдать настоящие Условия использования и все применимые законы и правила Республики Казахстан.</p>
+                
+                <h3>2. Право на использование</h3>
+                <p>Для использования UniSwap SDU необходимо:</p>
+                <ul>
+                    <li>Быть действующим студентом, преподавателем или сотрудником Университета Сулеймана Демиреля</li>
+                    <li>Иметь подтверждённый email адрес домена @sdu.edu.kz или @stu.sdu.edu.kz</li>
+                    <li>Достичь возраста 18 лет на момент регистрации</li>
+                    <li>Предоставить точную и полную информацию при создании аккаунта</li>
+                </ul>
+                
+                <h3>3. Ответственность пользователей</h3>
+                <p>Как пользователь UniSwap SDU, вы обязуетесь:</p>
+                <ul>
+                    <li>Предоставлять достоверную информацию о товарах, выставленных на обмен или продажу</li>
+                    <li>Размещать только те товары, которыми вы законно владеете и имеете право передавать</li>
+                    <li>Не публиковать незаконный, оскорбительный, дискриминационный или вводящий в заблуждение контент</li>
+                    <li>Добросовестно выполнять договорённости с другими пользователями платформы</li>
+                    <li>Незамедлительно сообщать о нарушениях или подозрительной активности администрации</li>
+                    <li>Уважать права и интересы других участников сообщества</li>
+                </ul>
+                
+                <h3>4. Запрещённая деятельность</h3>
+                <p>На UniSwap SDU строго запрещено:</p>
+                <ul>
+                    <li>Размещение украденных, поддельных или незаконных товаров</li>
+                    <li>Публикация материалов, способствующих академическому мошенничеству (шпаргалки, украденные экзаменационные материалы)</li>
+                    <li>Продажа или обмен оружием, наркотическими веществами, алкоголем или табачными изделиями</li>
+                    <li>Домогательства, дискриминация, угрозы или вредоносное поведение по отношению к другим пользователям</li>
+                    <li>Распространение спама, фишинга или участие в мошеннических схемах</li>
+                    <li>Коммерческая перепродажа материалов, лицензированных университетом</li>
+                    <li>Нарушение авторских прав третьих лиц</li>
+                </ul>
+                
+                <div class="highlight-box warning">
+                    <strong>Предупреждение:</strong> Пользователи, нарушающие эти правила, могут быть временно заблокированы или навсегда исключены из платформы без права восстановления.
+                </div>
+                
+                <h3>5. Сделки и платежи</h3>
+                <p>UniSwap SDU служит исключительно платформой для связи пользователей. Все сделки совершаются напрямую между участниками. Мы не:</p>
+                <ul>
+                    <li>Обрабатываем платежи или переводим денежные средства</li>
+                    <li>Гарантируем качество, безопасность или законность товаров</li>
+                    <li>Выступаем посредником в спорах между пользователями</li>
+                    <li>Предоставляем страховку или защиту сделок</li>
+                </ul>
+                
+                <h3>6. Интеллектуальная собственность</h3>
+                <p>Весь контент UniSwap SDU, включая логотипы, дизайн и тексты, является собственностью Университета Сулеймана Демиреля. Контент, созданный пользователями, остаётся их собственностью, при этом пользователи предоставляют UniSwap SDU неисключительную лицензию на отображение такого контента на платформе.</p>
+                
+                <h3>7. Ограничение ответственности</h3>
+                <p>UniSwap SDU и Университет Сулеймана Демиреля не несут ответственности за:</p>
+                <ul>
+                    <li>Любые прямые или косвенные убытки, возникшие в результате сделок между пользователями</li>
+                    <li>Потерю данных, прибыли или бизнес-возможностей</li>
+                    <li>Действия третьих лиц или других пользователей платформы</li>
+                    <li>Временную недоступность платформы по техническим причинам</li>
+                </ul>
+                
+                <h3>8. Изменения условий</h3>
+                <p>Мы оставляем за собой право изменять эти условия в любое время. Пользователи будут уведомлены о значительных изменениях по электронной почте или через объявление на платформе. Продолжение использования платформы означает принятие изменённых условий.</p>
+                
+                <h3>9. Прекращение доступа</h3>
+                <p>Мы можем приостановить или прекратить ваш доступ к UniSwap SDU в любое время без предварительного уведомления за поведение, нарушающее настоящие Условия или наносящее вред другим пользователям, нам или третьим лицам.</p>
+            </div>
+            
+            <!-- Kazakh Version -->
+            <div class="legal-content" data-lang="kz" style="display: none;">
+                <div class="highlight-box info">
+                    <strong>Маңызды:</strong> UniSwap SDU қолдана отырып, сіз осы шарттарды қабылдайсыз. Оларды мұқият оқып шығыңыз.
+                </div>
+                
+                <h3>1. Шарттарды қабылдау</h3>
+                <p>UniSwap SDU — Сүлейман Демирел Университетінің студенттері арналған алмасу платформасына қош келдіңіз. Біздің платформаны қолдана отырып, сіз осы Қолдану шарттарымен және Қазақстан Республикасының барлық қолданыстағы заңдарымен ережелермен келісесіз.</p>
+                
+                <h3>2. Қолдану құқығы</h3>
+                <p>UniSwap SDU қолдану үшін мынадай талаптар орындалуы қажет:</p>
+                <ul>
+                    <li>Сүлейман Демирел Университетінің студенті, оқытушысы немесе қызметкері болу</li>
+                    <li>@sdu.edu.kz немесе @stu.sdu.edu.kz электрондық пошта адресі расталған болуы керек</li>
+                    <li>Тіркелу кезінде кемінде 18 жаста болу</li>
+                    <li>Аккаунт жасағанда дұрыс және толық ақпарат беру</li>
+                </ul>
+                
+                <h3>3. Пайдаланушылардың жауапкершілігі</h3>
+                <p>UniSwap SDU пайдаланушысы ретінде сіз мыналарға міндеттенесіз:</p>
+                <ul>
+                    <li>Алмасу немесе сатуға шығарылған тауарлар туралы дұрыс ақпарат беру</li>
+                    <li>Законды иеленетін және беруге құқығы бар тауарларды ғана орналастыру</li>
+                    <li>Заңсыз, қорлайтын, дискриминациялық немесе жаңылыстыратын контент жарияламау</li>
+                    <li>Басқа пайдаланушылармен келісілген шарттарды адал орындау</li>
+                    <li>Бұзушылықтар немесе күдікті әрекеттер туралы әкімшілікке дереу хабарлау</li>
+                    <li>Басқа қатысушылардың құқықтары мен мүдделерін құрметтеу</li>
+                </ul>
+                
+                <h3>4. Тыйым салынған әрекеттер</h3>
+                <p>UniSwap SDU платформасында мыналар қатаң тыйым салынады:</p>
+                <ul>
+                    <li>Ұрланған, жалған немесе заңсыз тауарларды орналастыру</li>
+                    <li>Академиялық жемқорлыққа ықпал ететін материалдарды жариялау (шпаргалкалар, ұрланған емтихан материалдары)</li>
+                    <li>Қару, нашақорлық заттар, алкоголь немесе темекі бұйымдарын сату немесе алмасу</li>
+                    <li>Басқа пайдаланушыларға қатысты қудалау, дискриминация, қауіп-қатер немесе зиянды әрекеттер</li>
+                    <li>Спам, фишинг тарату немесе алаяқтық схемаларға қатысу</li>
+                    <li>Университет лицензиялаған материалдарды коммерциялық қайта сату</li>
+                    <li>Үшінші тұлғалардың авторлық құқықтарын бұзу</li>
+                </ul>
+                
+                <div class="highlight-box warning">
+                    <strong>Ескерту:</strong> Бұл ережелерді бұзған пайдаланушылар уақытша блокталуы немесе платформадан қайтарылмайтын етіп шығарылуы мүмкін.
+                </div>
+                
+                <h3>5. Мәмілелер мен төлемдер</h3>
+                <p>UniSwap SDU тек пайдаланушыларды байланыстыру платформасы ретінде қызмет етеді. Барлық мәмілелер қатысушылар арасында тікелей жасалады. Біз:</p>
+                <ul>
+                    <li>Төлемдерді өңдемейміз немесе ақша аудармаймыз</li>
+                    <li>Тауарлардың сапасы, қауіпсіздігі немесе заңдылығына кепілдік бермейміз</li>
+                    <li>Пайдаланушылар арасындағы дауларда делдал болмаймыз</li>
+                    <li>Мәмілелерге сақтандыру немесе қорғау ұсынбаймыз</li>
+                </ul>
+                
+                <h3>6. Интеллектуалды меншік</h3>
+                <p>UniSwap SDU-дың барлық контенті, логотиптер, дизайн және мәтіндерді қоса, Сүлейман Демирел Университетінің меншігі болып табылады. Пайдаланушылар жасаған контент олардың меншігі болып қалады, бұл ретте пайдаланушылар UniSwap SDU-ға осындай контентті платформада көрсету үшін шектелмеген лицензия береді.</p>
+                
+                <h3>7. Жауапкершілікті шектеу</h3>
+                <p>UniSwap SDU және Сүлейман Демирел Университеті мыналар үшін жауапты емес:</p>
+                <ul>
+                    <li>Пайдаланушылар арасындағы мәмілелерден туындаған кез келген тікелей немесе жанама шығындар</li>
+                    <li>Деректердің, пайданың немесе бизнес мүмкіндіктердің жоғалуы</li>
+                    <li>Үшінші тұлғалардың немесе басқа пайдаланушылардың әрекеттері</li>
+                    <li>Техникалық себептер бойынша платформаның уақытша қолжетімсіздігі</li>
+                </ul>
+                
+                <h3>8. Шарттарды өзгерту</h3>
+                <p>Біз осы шарттарды кез келген уақытта өзгерту құқығын өзімізде сақтаймыз. Пайдаланушылар маңызды өзгерістерге электрондық пошта арқылы немесе платформадағы хабарландыру арқылы хабардар етіледі. Платформаны әрі қарай қолдану өзгертілген шарттарды қабылдауды білдіреді.</p>
+                
+                <h3>9. Қол жеткізуді тоқтату</h3>
+                <p>Біз осы Шарттарды бұзатын немесе басқа пайдаланушыларға, бізге немесе үшінші тұлғаларға зиян келтіретін мінез-құлық үшін сіздің UniSwap SDU-ға қол жеткізуіңізді алдын ала ескертусіз кез келген уақытта тоқтата немесе тоқтата аламыз.</p>
+            </div>
+        </div>
+
+        <!-- Privacy Policy -->
+        <div class="legal-section" id="privacy">
+            <h2 class="legal-section-title">Privacy Policy</h2>
+            <div class="legal-content" data-lang="en">
+                <h3>1. Information We Collect</h3>
+                <p>UniSwap SDU collects the following information:</p>
+                <ul>
+                    <li><strong>Account Information:</strong> Name, email address, student ID (optional)</li>
+                    <li><strong>Listing Information:</strong> Item descriptions, images, contact preferences</li>
+                    <li><strong>Usage Data:</strong> Pages visited, search queries, interaction patterns</li>
+                    <li><strong>Device Information:</strong> Browser type, IP address, device type</li>
+                </ul>
+                
+                <h3>2. How We Use Your Information</h3>
+                <p>We use collected information to:</p>
+                <ul>
+                    <li>Provide and improve our services</li>
+                    <li>Facilitate connections between users</li>
+                    <li>Communicate important platform updates</li>
+                    <li>Ensure platform security and prevent abuse</li>
+                    <li>Comply with legal obligations</li>
+                </ul>
+                
+                <h3>3. Information Sharing</h3>
+                <p>We do not sell or rent your personal information. We may share information with:</p>
+                <ul>
+                    <li>Other users (as necessary for transactions)</li>
+                    <li>University administration (when required by policy or law)</li>
+                    <li>Service providers who assist in platform operation</li>
+                </ul>
+                
+                <h3>4. Data Security</h3>
+                <p>We implement industry-standard security measures including:</p>
+                <ul>
+                    <li>Encrypted data transmission (HTTPS/TLS)</li>
+                    <li>Secure password hashing</li>
+                    <li>Regular security audits</li>
+                    <li>Limited access to personal data</li>
+                </ul>
+                
+                <h3>5. Your Rights</h3>
+                <p>You have the right to:</p>
+                <ul>
+                    <li>Access and download your personal data</li>
+                    <li>Request correction of inaccurate data</li>
+                    <li>Delete your account and associated data</li>
+                    <li>Object to certain processing activities</li>
+                </ul>
+                
+                <h3>6. Data Retention</h3>
+                <p>We retain personal data for as long as necessary to provide services. After account deletion, data may be retained for:</p>
+                <ul>
+                    <li>Legal compliance (up to 3 years)</li>
+                    <li>Security and fraud prevention</li>
+                    <li>Anonymized statistical analysis</li>
+                </ul>
+                
+                <h3>7. Cookies</h3>
+                <p>We use cookies to improve user experience. See our Cookie Policy for details.</p>
+                
+                <h3>8. Contact</h3>
+                <p>For privacy-related questions, contact us at <a href="mailto:privacy@uni-swap.kz">privacy@uni-swap.kz</a></p>
+            </div>
+            
+            <div class="legal-content" data-lang="ru" style="display: none;">
+                <h3>1. Собираемая информация</h3>
+                <p>UniSwap SDU собирает следующую информацию:</p>
+                <ul>
+                    <li><strong>Данные аккаунта:</strong> Имя, адрес электронной почты, студенческий ID (опционально)</li>
+                    <li><strong>Данные объявлений:</strong> Описания товаров, фотографии, предпочтения связи</li>
+                    <li><strong>Данные использования:</strong> Посещённые страницы, поисковые запросы, паттерны взаимодействия</li>
+                    <li><strong>Информация об устройстве:</strong> Тип браузера, IP-адрес, тип устройства</li>
+                </ul>
+                
+                <h3>2. Как мы используем вашу информацию</h3>
+                <p>Мы используем собранную информацию для:</p>
+                <ul>
+                    <li>Предоставления и улучшения наших сервисов</li>
+                    <li>Обеспечения связи между пользователями</li>
+                    <li>Коммуникации важных обновлений платформы</li>
+                    <li>Обеспечения безопасности платформы и предотвращения злоупотреблений</li>
+                    <li>Соблюдения юридических обязательств</li>
+                </ul>
+                
+                <h3>3. Обмен информацией</h3>
+                <p>Мы не продаём и не передаём в аренду вашу личную информацию. Мы можем делиться информацией с:</p>
+                <ul>
+                    <li>Другими пользователями (как необходимо для сделок)</li>
+                    <li>Администрацией университета (когда требуется по политике или закону)</li>
+                    <li>Поставщиками услуг, помогающими в работе платформы</li>
+                </ul>
+                
+                <h3>4. Защита данных</h3>
+                <p>Мы применяем стандартные меры безопасности, включая:</p>
+                <ul>
+                    <li>Шифрование передачи данных (HTTPS/TLS)</li>
+                    <li>Безопасное хеширование паролей</li>
+                    <li>Регулярные аудиты безопасности</li>
+                    <li>Ограниченный доступ к персональным данным</li>
+                </ul>
+                
+                <h3>5. Ваши права</h3>
+                <p>Вы имеете право:</p>
+                <ul>
+                    <li>Получить доступ и загрузить ваши персональные данные</li>
+                    <li>Запросить исправление неточных данных</li>
+                    <li>Удалить ваш аккаунт и связанные данные</li>
+                    <li>Возразить против определённых видов обработки</li>
+                </ul>
+                
+                <h3>6. Хранение данных</h3>
+                <p>Мы храним персональные данные столько, сколько необходимо для предоставления услуг. После удаления аккаунта данные могут сохраняться для:</p>
+                <ul>
+                    <li>Соблюдения законодательства (до 3 лет)</li>
+                    <li>Безопасности и предотвращения мошенничества</li>
+                    <li>Анонимизированного статистического анализа</li>
+                </ul>
+                
+                <h3>7. Cookies</h3>
+                <p>Мы используем cookies для улучшения пользовательского опыта. Подробности см. в нашей Политике Cookies.</p>
+                
+                <h3>8. Контакты</h3>
+                <p>По вопросам конфиденциальности свяжитесь с нами: <a href="mailto:privacy@uni-swap.kz">privacy@uni-swap.kz</a></p>
+            </div>
+            
+            <div class="legal-content" data-lang="kz" style="display: none;">
+                <h3>1. Жиналатын ақпарат</h3>
+                <p>UniSwap SDU келесі ақпаратты жинайды:</p>
+                <ul>
+                    <li><strong>Аккаунт деректері:</strong> Аты, электрондық пошта адресі, студенттік ID (қосымша)</li>
+                    <li><strong>Хабарландыру деректері:</strong> Тауарлар сипаттамалары, суреттер, байланысу артықшылықтары</li>
+                    <li><strong>Қолдану деректері:</strong> Қаралған беттер, іздеу сұраныстары, әрекет үлгілері</li>
+                    <li><strong>Құрылғы ақпараты:</strong> Браузер түрі, IP мекенжайы, құрылғы түрі</li>
+                </ul>
+                
+                <h3>2. Ақпаратты қалай қолданамыз</h3>
+                <p>Біз жиналған ақпаратты мына мақсаттарда қолданамыз:</p>
+                <ul>
+                    <li>Сервистерді ұсыну және жетілдіру</li>
+                    <li>Пайдаланушылар арасындағы байланысты қамтамасыз ету</li>
+                    <li>Платформаның маңызды жаңартуларын хабарлау</li>
+                    <li>Платформа қауіпсіздігін қамтамасыз ету және теріс пайдаланудың алдын алу</li>
+                    <li>Заңды міндеттерді орындау</li>
+                </ul>
+                
+                <h3>3. Ақпаратпен бөлісу</h3>
+                <p>Біз жеке ақпаратыңызды сатпаймыз немесе жалға бермейміз. Біз ақпаратпен мыналармен бөлісуіміз мүмкін:</p>
+                <ul>
+                    <li>Басқа пайдаланушылармен (мәмілелер үшін қажетті)</li>
+                    <li>Университет әкімшілігімен (саясат немесе заң бойынша қажет болғанда)</li>
+                    <li>Платформа жұмысына көмектесетін сервистер ұсынушылармен</li>
+                </ul>
+                
+                <h3>4. Деректерді қорғау</h3>
+                <p>Біз стандартты қауіпсіздік шараларын қолданамыз:</p>
+                <ul>
+                    <li>Деректер беру шифрлауы (HTTPS/TLS)</li>
+                    <li>Құпия сөздерді қауіпсіз хэштеу</li>
+                    <li>Тұрақты қауіпсіздік тексерулері</li>
+                    <li>Жеке деректерге шектелген қол жеткізу</li>
+                </ul>
+                
+                <h3>5. Сіздің құқықтарыңыз</h3>
+                <p>Сіздің мынадай құқықтарыңыз бар:</p>
+                <ul>
+                    <li>Жеке деректеріңізге қол жеткізу және жүктеу</li>
+                    <li>Дұрыс емес деректерді түзетуді сұрау</li>
+                    <li>Аккаунтыңызды және байланысты деректерді жою</li>
+                    <li>Белгілі бір өңдеу әрекеттеріне қарсылық білдіру</li>
+                </ul>
+                
+                <h3>6. Деректерді сақтау</h3>
+                <p>Біз жеке деректерді сервистерді ұсыну үшін қажетті уақыт бойынша сақтаймыз. Аккаунт жойылғаннан кейін деректер мыналар үшін сақталуы мүмкін:</p>
+                <ul>
+                    <li>Заңнаманы орындау (3 жылға дейін)</li>
+                    <li>Қауіпсіздік және алаяқтықтың алдын алу</li>
+                    <li>Анонимдендірілген статистикалық талдау</li>
+                </ul>
+                
+                <h3>7. Cookies</h3>
+                <p>Біз пайдаланушы тәжірибесін жақсарту үшін cookies қолданамыз. Толығырақ Cookies Саясатында қараңыз.</p>
+                
+                <h3>8. Байланыс</h3>
+                <p>Құпиялылық туралы сұрақтар бойынша бізге хабарласыңыз: <a href="mailto:privacy@uni-swap.kz">privacy@uni-swap.kz</a></p>
+            </div>
+        </div>
+
+        <!-- User Agreement -->
+        <div class="legal-section" id="user">
+            <h2 class="legal-section-title">User Agreement</h2>
+            <div class="legal-content" data-lang="en">
+                <div class="highlight-box info">
+                    This agreement is a binding contract between you and UniSwap SDU. By creating an account, you acknowledge that you have read, understood, and agree to be bound by this agreement.
+                </div>
+                
+                <h3>1. Account Creation</h3>
+                <p>When creating an account, you agree to:</p>
+                <ul>
+                    <li>Provide accurate and truthful information</li>
+                    <li>Maintain the security of your account credentials</li>
+                    <li>Not share your account with others</li>
+                    <li>Notify us immediately of any unauthorized access</li>
+                </ul>
+                
+                <h3>2. User Conduct</h3>
+                <p>You agree to use UniSwap SDU only for lawful purposes and in accordance with these guidelines:</p>
+                <ul>
+                    <li>Treat other users with respect and courtesy</li>
+                    <li>Communicate honestly about items and transactions</li>
+                    <li>Honor commitments made to other users</li>
+                    <li>Report violations and cooperate with investigations</li>
+                </ul>
+                
+                <h3>3. Content Guidelines</h3>
+                <p>All content posted on UniSwap SDU must:</p>
+                <ul>
+                    <li>Be accurate and not misleading</li>
+                    <li>Not infringe on intellectual property rights</li>
+                    <li>Not contain offensive, discriminatory, or harmful material</li>
+                    <li>Comply with university codes of conduct</li>
+                </ul>
+                
+                <h3>4. Dispute Resolution</h3>
+                <p>In case of disputes between users:</p>
+                <ul>
+                    <li>Users should first attempt to resolve issues directly</li>
+                    <li>Mediation may be requested through platform administrators</li>
+                    <li>Serious violations may be reported to university authorities</li>
+                </ul>
+                
+                <h3>5. Acknowledgment</h3>
+                <p>By using UniSwap SDU, you acknowledge that:</p>
+                <ul>
+                    <li>You are using the platform at your own risk</li>
+                    <li>UniSwap SDU is not responsible for user-to-user transactions</li>
+                    <li>You will comply with all applicable laws and university policies</li>
+                </ul>
+            </div>
+            
+            <div class="legal-content" data-lang="ru" style="display: none;">
+                <div class="highlight-box info">
+                    Это соглашение является обязывающим договором между вами и UniSwap SDU. Создавая аккаунт, вы подтверждаете, что прочитали, поняли и согласны соблюдать это соглашение.
+                </div>
+                
+                <h3>1. Создание аккаунта</h3>
+                <p>При создании аккаунта вы соглашаетесь:</p>
+                <ul>
+                    <li>Предоставлять точную и правдивую информацию</li>
+                    <li>Сохранять конфиденциальность учётных данных аккаунта</li>
+                    <li>Не передавать ваш аккаунт другим лицам</li>
+                    <li>Незамедлительно уведомлять нас о любом несанкционированном доступе</li>
+                </ul>
+                
+                <h3>2. Поведение пользователя</h3>
+                <p>Вы соглашаетесь использовать UniSwap SDU только для законных целей и в соответствии с этими правилами:</p>
+                <ul>
+                    <li>Относиться к другим пользователям с уважением и вежливостью</li>
+                    <li>Честно общаться о товарах и сделках</li>
+                    <li>Выполнять обязательства, принятые перед другими пользователями</li>
+                    <li>Сообщать о нарушениях и сотрудничать с расследованиями</li>
+                </ul>
+                
+                <h3>3. Руководство по контенту</h3>
+                <p>Весь контент, размещённый на UniSwap SDU, должен:</p>
+                <ul>
+                    <li>Быть точным и не вводить в заблуждение</li>
+                    <li>Не нарушать права интеллектуальной собственности</li>
+                    <li>Не содержать оскорбительного, дискриминационного или вредного материала</li>
+                    <li>Соответствовать кодексу поведения университета</li>
+                </ul>
+                
+                <h3>4. Разрешение споров</h3>
+                <p>В случае споров между пользователями:</p>
+                <ul>
+                    <li>Пользователи должны сначала попытаться решить проблемы напрямую</li>
+                    <li>Можно запросить посредничество через администраторов платформы</li>
+                    <li>О серьёзных нарушениях можно сообщить университетским властям</li>
+                </ul>
+                
+                <h3>5. Подтверждение</h3>
+                <p>Используя UniSwap SDU, вы подтверждаете, что:</p>
+                <ul>
+                    <li>Используете платформу на свой риск</li>
+                    <li>UniSwap SDU не несёт ответственности за сделки между пользователями</li>
+                    <li>Вы будете соблюдать все применимые законы и правила университета</li>
+                </ul>
+            </div>
+            
+            <div class="legal-content" data-lang="kz" style="display: none;">
+                <div class="highlight-box info">
+                    Бұл келісім сіз бен UniSwap SDU арасындағы міндетті келісім-шарт болып табылады. Аккаунт жасау арқылы сіз осы келісімді оқып, түсінгеніңізді және орындауға келісетініңізді растайсыз.
+                </div>
+                
+                <h3>1. Аккаунт жасау</h3>
+                <p>Аккаунт жасағанда сіз мынадай міндеттерді қабылдайсыз:</p>
+                <ul>
+                    <li>Дұрыс және шын ақпарат беру</li>
+                    <li>Аккаунт тіркелу деректерін құпия сақтау</li>
+                    <li>Аккаунтыңызды басқаларға бермеу</li>
+                    <li>Кез келген рұқсат етілмеген қол жеткізу туралы бізге дереу хабарлау</li>
+                </ul>
+                
+                <h3>2. Пайдаланушы мінез-құлқы</h3>
+                <p>Сіз UniSwap SDU-ды тек заңды мақсаттарда және осы ережелерге сәйкес қолдануға келісесіз:</p>
+                <ul>
+                    <li>Басқа пайдаланушыларға құрметпен және сыпайылықпен қарау</li>
+                    <li>Тауарлар мен мәмілелер туралы адал байланысу</li>
+                    <li>Басқа пайдаланушылар алдындағы міндеттемелерді орындау</li>
+                    <li>Бұзушылықтар туралы хабарлау және тергеулерге ынтымақтасу</li>
+                </ul>
+                
+                <h3>3. Контент нұсқаулығы</h3>
+                <p>UniSwap SDU-да жарияланған барлық контент:</p>
+                <ul>
+                    <li>Дұрыс және жаңылыстырмайтын болуы керек</li>
+                    <li>Интеллектуалды меншік құқықтарын бұзбауы керек</li>
+                    <li>Қорлайтын, дискриминациялық немесе зиянды материалдарды қоспауы керек</li>
+                    <li>Университеттің мінез-құлық кодексіне сәйкес келуі керек</li>
+                </ul>
+                
+                <h3>4. Дауларды шешу</h3>
+                <p>Пайдаланушылар арасындағы даулар жағдайында:</p>
+                <ul>
+                    <li>Пайдаланушылар алдымен мәселелерді тікелей шешуге тырысуы керек</li>
+                    <li>Платформа әкімшілері арқылы делдалдық сұрауға болады</li>
+                    <li>Елеулі бұзушылықтар туралы университет билігіне хабарлауға болады</li>
+                </ul>
+                
+                <h3>5. Растау</h3>
+                <p>UniSwap SDU-ды қолдана отырып, сіз мынаны растайсыз:</p>
+                <ul>
+                    <li>Платформаны өз тәуекеліңізбен қолданасыз</li>
+                    <li>UniSwap SDU пайдаланушылар арасындағы мәмілелер үшін жауапты емес</li>
+                    <li>Барлық қолданыстағы заңдар мен университет ережелерін орындайсыз</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Cookie Policy -->
+        <div class="legal-section" id="cookies">
+            <h2 class="legal-section-title">Cookie Policy</h2>
+            <div class="legal-content" data-lang="en">
+                <h3>What Are Cookies?</h3>
+                <p>Cookies are small text files stored on your device when you visit our website. They help us provide a better user experience.</p>
+                
+                <h3>Types of Cookies We Use</h3>
+                <ul>
+                    <li><strong>Essential Cookies:</strong> Required for basic platform functionality (login, navigation)</li>
+                    <li><strong>Functional Cookies:</strong> Remember your preferences and settings</li>
+                    <li><strong>Analytics Cookies:</strong> Help us understand how users interact with our platform</li>
+                    <li><strong>Security Cookies:</strong> Protect against fraudulent activity</li>
+                </ul>
+                
+                <h3>How to Manage Cookies</h3>
+                <p>You can control cookies through your browser settings. Note that disabling certain cookies may affect platform functionality.</p>
+                
+                <h3>Third-Party Cookies</h3>
+                <p>We may use third-party services that set their own cookies. These are governed by the respective third-party privacy policies.</p>
+                
+                <h3>Updates</h3>
+                <p>This Cookie Policy may be updated periodically. Continued use of the platform constitutes acceptance of any changes.</p>
+            </div>
+            
+            <div class="legal-content" data-lang="ru" style="display: none;">
+                <h3>Что такое Cookies?</h3>
+                <p>Cookies — это небольшие текстовые файлы, сохраняемые на вашем устройстве при посещении нашего сайта. Они помогают нам обеспечить лучший пользовательский опыт.</p>
+                
+                <h3>Типы используемых Cookies</h3>
+                <ul>
+                    <li><strong>Основные cookies:</strong> Необходимы для базовой функциональности платформы (вход, навигация)</li>
+                    <li><strong>Функциональные cookies:</strong> Запоминают ваши предпочтения и настройки</li>
+                    <li><strong>Аналитические cookies:</strong> Помогают нам понять, как пользователи взаимодействуют с нашей платформой</li>
+                    <li><strong>Cookies безопасности:</strong> Защищают от мошеннической активности</li>
+                </ul>
+                
+                <h3>Как управлять Cookies</h3>
+                <p>Вы можете контролировать cookies через настройки вашего браузера. Обратите внимание, что отключение определённых cookies может повлиять на функциональность платформы.</p>
+                
+                <h3>Cookies третьих сторон</h3>
+                <p>Мы можем использовать сервисы третьих сторон, которые устанавливают собственные cookies. Они регулируются соответствующими политиками конфиденциальности этих сторон.</p>
+                
+                <h3>Обновления</h3>
+                <p>Эта Политика Cookies может периодически обновляться. Продолжение использования платформы означает принятие любых изменений.</p>
+            </div>
+            
+            <div class="legal-content" data-lang="kz" style="display: none;">
+                <h3>Cookies дегеніміз не?</h3>
+                <p>Cookies — біздің сайтқа кіргенде құрылғыңызда сақталатын кішкентай мәтін файлдары. Олар бізге жақсырақ пайдаланушы тәжірибесін ұсынуға көмектеседі.</p>
+                
+                <h3>Қолданылатын Cookies түрлері</h3>
+                <ul>
+                    <li><strong>Негізгі cookies:</strong> Платформаның негізгі функционалдылығы үшін қажет (кіру, навигация)</li>
+                    <li><strong>Функционалды cookies:</strong> Сіздің артықшылықтарыңызды және баптауларыңызды есте сақтайды</li>
+                    <li><strong>Аналитикалық cookies:</strong> Пайдаланушылар платформамен қалай әрекеттесетінін түсінуге көмектеседі</li>
+                    <li><strong>Қауіпсіздік cookies:</strong> Алаяқтық әрекеттерден қорғайды</li>
+                </ul>
+                
+                <h3>Cookies-ты қалай басқаруға болады</h3>
+                <p>Сіз cookies-ты браузеріңіздің баптаулары арқылы басқара аласыз. Белгілі бір cookies-ты өшіру платформаның функционалдылығына әсер етуі мүмкін екенін ескеріңіз.</p>
+                
+                <h3>Үшінші тарап cookies-тары</h3>
+                <p>Біз өздерінің cookies-тарын орнататын үшінші тарап сервистерін қолдануымыз мүмкін. Олар тиісті үшінші тарап құпиялылық саясаттарымен реттеледі.</p>
+                
+                <h3>Жаңартулар</h3>
+                <p>Бұл Cookies Саясаты мерзімді түрде жаңартылуы мүмкін. Платформаны әрі қарай қолдану кез келген өзгерістерді қабылдауды білдіреді.</p>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="legal-section" id="copyright">
+            <h2 class="legal-section-title">Copyright & DMCA</h2>
+            <div class="legal-content" data-lang="en">
+                <h3>Platform Content</h3>
+                <p>The UniSwap SDU platform, including its logo, design, code, and original content, is owned by Suleyman Demirel University and protected by copyright laws.</p>
+                
+                <h3>User Content</h3>
+                <p>Content uploaded by users remains the property of the respective users. By posting content, you grant UniSwap SDU a non-exclusive, royalty-free license to display such content on the platform.</p>
+                
+                <h3>Copyright Infringement</h3>
+                <p>If you believe your copyrighted work has been infringed upon:</p>
+                <ul>
+                    <li>Submit a written notice to <a href="mailto:copyright@uni-swap.kz">copyright@uni-swap.kz</a></li>
+                    <li>Include identification of the copyrighted work</li>
+                    <li>Provide the URL of the allegedly infringing content</li>
+                    <li>Include your contact information</li>
+                </ul>
+                
+                <h3>DMCA Compliance</h3>
+                <p>We respond to valid Digital Millennium Copyright Act (DMCA) notices and will remove infringing content when properly notified.</p>
+                
+                <h3>Counter-Notice</h3>
+                <p>If you believe your content was wrongly removed, you may submit a counter-notice with supporting evidence.</p>
+                
+                <h3>Repeat Infringers</h3>
+                <p>Users who repeatedly infringe copyright may have their accounts terminated.</p>
+            </div>
+            
+            <div class="legal-content" data-lang="ru" style="display: none;">
+                <h3>Контент платформы</h3>
+                <p>Платформа UniSwap SDU, включая её логотип, дизайн, код и оригинальный контент, принадлежит Университету Сулеймана Демиреля и защищена законами об авторском праве.</p>
+                
+                <h3>Контент пользователей</h3>
+                <p>Контент, загруженный пользователями, остаётся собственностью соответствующих пользователей. Размещая контент, вы предоставляете UniSwap SDU неисключительную безвозмездную лицензию на отображение такого контента на платформе.</p>
+                
+                <h3>Нарушение авторских прав</h3>
+                <p>Если вы считаете, что ваше авторское право было нарушено:</p>
+                <ul>
+                    <li>Отправьте письменное уведомление на <a href="mailto:copyright@uni-swap.kz">copyright@uni-swap.kz</a></li>
+                    <li>Укажите идентификацию авторского произведения</li>
+                    <li>Предоставьте URL предположительно нарушающего контента</li>
+                    <li>Укажите вашу контактную информацию</li>
+                </ul>
+                
+                <h3>Соответствие DMCA</h3>
+                <p>Мы отвечаем на действительные уведомления Digital Millennium Copyright Act (DMCA) и удаляем нарушающий контент при надлежащем уведомлении.</p>
+                
+                <h3>Встречное уведомление</h3>
+                <p>Если вы считаете, что ваш контент был ошибочно удалён, вы можете подать встречное уведомление с подтверждающими доказательствами.</p>
+                
+                <h3>Повторные нарушители</h3>
+                <p>Пользователи, неоднократно нарушающие авторские права, могут лишиться своих аккаунтов.</p>
+            </div>
+            
+            <div class="legal-content" data-lang="kz" style="display: none;">
+                <h3>Платформа контенті</h3>
+                <p>UniSwap SDU платформасы, логотип, дизайн, код және түпнұсқа контентті қоса, Сүлейман Демирел Университетіне тиесілі және авторлық құқық заңдарымен қорғалады.</p>
+                
+                <h3>Пайдаланушылар контенті</h3>
+                <p>Пайдаланушылар жүктеген контент тиісті пайдаланушылардың меншігі болып қалады. Контентті жариялай отырып, сіз UniSwap SDU-ға осындай контентті платформада көрсету үшін шектелмеген тегін лицензия бересіз.</p>
+                
+                <h3>Авторлық құқықты бұзу</h3>
+                <p>Егер сіз авторлық құқығыңыз бұзылды деп санасаңыз:</p>
+                <ul>
+                    <li><a href="mailto:copyright@uni-swap.kz">copyright@uni-swap.kz</a> мекенжайына жазбаша хабарландыру жіберіңіз</li>
+                    <li>Авторлық шығарманың сәйкестендіруін көрсетіңіз</li>
+                    <li>Бұзылған контенттің URL-ын беріңіз</li>
+                    <li>Байланыс ақпаратыңызды көрсетіңіз</li>
+                </ul>
+                
+                <h3>DMCA сәйкестігі</h3>
+                <p>Біз Digital Millennium Copyright Act (DMCA) хабарландыруларына жауап береміз және тиісті хабарландыру кезінде бұзылған контентті жоямыз.</p>
+                
+                <h3>Қарсы хабарландыру</h3>
+                <p>Егер сіз контентіңіз қате жойылды деп санасаңыз, растайтын дәлелдері бар қарсы хабарландыру бере аласыз.</p>
+                
+                <h3>Қайталанатын бұзушылар</h3>
+                <p>Авторлық құқықты бірнеше рет бұзған пайдаланушылар аккаунттарынан айырылуы мүмкін.</p>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info">
+            <h4>Contact Us</h4>
+            <p>📧 Email: legal@uni-swap.kz</p>
+            <p>📍 Address: Suleyman Demirel University, Kaskelen, Kazakhstan</p>
+            <p>📞 Phone: +7 (727) 307 9000</p>
+            <p style="margin-top: 12px; font-size: 12px; opacity: 0.7;">UniSwap SDU © 2026 Suleyman Demirel University. All rights reserved.</p>
+        </div>
+    </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Language tabs
+    const langTabs = document.querySelectorAll('.lang-tab');
+    const legalContents = document.querySelectorAll('.legal-content');
+    
+    langTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const lang = this.getAttribute('data-lang');
+            
+            langTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            legalContents.forEach(content => {
+                if (content.getAttribute('data-lang') === lang) {
+                    content.style.display = 'block';
+                } else {
+                    content.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Section navigation
+    const navBtns = document.querySelectorAll('.legal-nav-btn');
+    const sections = document.querySelectorAll('.legal-section');
+    
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const sectionId = this.getAttribute('data-section');
+            
+            navBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            sections.forEach(section => {
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+            
+            // Reset to English when switching sections
+            langTabs.forEach(t => t.classList.remove('active'));
+            langTabs[0].classList.add('active');
+            legalContents.forEach(c => {
+                c.style.display = c.getAttribute('data-lang') === 'en' ? 'block' : 'none';
+            });
+        });
+    });
+});
+</script>
 {% endblock %}

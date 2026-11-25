@@ -37,6 +37,62 @@ def account(request):
     return render(request, 'main/account.html', {'profile': getattr(request.user, 'profile', None) if request.user.is_authenticated else None, 'form': EmailAuthenticationForm(request), 'next': request.GET.get('next', '')})
 
 
+@require_POST
+def register(request):
+    """Register a new SDU student account."""
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.hashers import check_password
+    import re
+    
+    name = request.POST.get('name', '').strip()
+    email = request.POST.get('email', '').strip().lower()
+    password = request.POST.get('password', '')
+    password2 = request.POST.get('password2', '')
+    
+    User = get_user_model()
+    
+    # Validation
+    if not name or not email or not password:
+        messages.error(request, 'All fields are required.')
+        return redirect('account')
+    
+    if password != password2:
+        messages.error(request, 'Passwords do not match.')
+        return redirect('account')
+    
+    if len(password) < 8:
+        messages.error(request, 'Password must be at least 8 characters.')
+        return redirect('account')
+    
+    # Check if email is SDU email
+    if not email.endswith('@sdu.edu.kz') and not email.endswith('@stu.sdu.edu.kz'):
+        messages.error(request, 'Please use your SDU email address.')
+        return redirect('account')
+    
+    if User.objects.filter(email__iexact=email).exists():
+        messages.error(request, 'An account with this email already exists.')
+        return redirect('account')
+    
+    # Create user
+    parts = name.split(None, 1)
+    first_name = parts[0] if parts else ''
+    last_name = parts[1] if len(parts) > 1 else ''
+    
+    user = User.objects.create_user(
+        username=email.split('@')[0],
+        email=email,
+        password=password,
+        first_name=first_name,
+        last_name=last_name
+    )
+    
+    from django.contrib.auth import login
+    login(request, user, backend='main.authentication.EmailBackend')
+    
+    messages.success(request, 'Account created successfully!')
+    return redirect('index')
+
+
 
 def api_items(request):
     if request.method == 'GET':
