@@ -1,0 +1,20 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block title %}Create a Post | UniSwap SDU{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'main/css/marketplace.css' %}">{% endblock %}
+{% block content %}
+<main class="container listing-form-page">
+  <a class="back-link" href="{% url 'index' %}">← Back to marketplace</a>
+  <h1 class="categories-title">Create a Post</h1>
+  <form method="post" enctype="multipart/form-data" class="listing-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-error-banner">{{ form.non_field_errors }}</div>{% endif %}
+    {% for field in form %}<div class="listing-field"><label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>{{ field }}{% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}</div>{% endfor %}
+    <img id="imagePreview" class="listing-image-preview" alt="Selected image preview" hidden>
+    <button class="btn-auth" type="submit">Publish listing</button>
+  </form>
+</main>
+{% endblock %}
+{% block extra_js %}<script>
+document.addEventListener('DOMContentLoaded',()=>{const input=document.getElementById('id_image'),preview=document.getElementById('imagePreview');input?.addEventListener('change',()=>{const file=input.files[0];if(!file){preview.hidden=true;preview.removeAttribute('src');return;}preview.src=URL.createObjectURL(file);preview.hidden=false;});});
+</script>{% endblock %}

@@ -1,5 +1,6 @@
 import json
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -34,7 +35,21 @@ def wishlist(request):
 
 def account(request):
     from .forms import EmailAuthenticationForm
-    return render(request, 'main/account.html', {'profile': getattr(request.user, 'profile', None) if request.user.is_authenticated else None, 'form': EmailAuthenticationForm(request), 'next': request.GET.get('next', '')})
+    listings = Item.objects.filter(owner=request.user, is_available=True) if request.user.is_authenticated else Item.objects.none()
+    return render(request, 'main/account.html', {'profile': getattr(request.user, 'profile', None) if request.user.is_authenticated else None, 'listings': listings, 'form': EmailAuthenticationForm(request), 'next': request.GET.get('next', '')})
+
+
+@login_required
+def create_post(request):
+    from .forms import ItemForm
+    form = ItemForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST' and form.is_valid():
+        item = form.save(commit=False)
+        item.owner = request.user
+        item.save()
+        messages.success(request, 'Your listing has been published.')
+        return redirect('account')
+    return render(request, 'main/create_post.html', {'form': form})
 
 
 @require_POST

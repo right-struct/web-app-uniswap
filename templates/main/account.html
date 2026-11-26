@@ -281,15 +281,20 @@
                 </form>
             </div>
         </div>
+        <section class="profile-listings" aria-labelledby="my-listings-title">
+            <div class="profile-listings-heading"><h2 id="my-listings-title">My active listings</h2>
+            {% if listings|length > 1 %}<div class="carousel-controls"><button type="button" class="carousel-arrow" id="listingsPrev" aria-label="Scroll listings left">‹</button><button type="button" class="carousel-arrow" id="listingsNext" aria-label="Scroll listings right">›</button></div>{% endif %}</div>
+            {% if listings %}<div class="listings-carousel" id="listingsCarousel">
+              {% for item in listings %}<a class="profile-listing-card" href="{% url 'api_item_detail' item.id %}" aria-label="View {{ item.title }}">
+                {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.title }}">{% else %}<div class="profile-listing-no-image">No image</div>{% endif %}
+                <span class="profile-listing-title">{{ item.title }}</span><span class="profile-listing-price">{% if item.price %}{{ item.price }} ₸{% else %}{{ item.get_listing_type_display }}{% endif %}</span><span class="profile-listing-status">{{ item.get_listing_type_display }}</span>
+              </a>{% endfor %}
+            </div>{% else %}<p class="listings-empty">You have no active listings yet.</p>{% endif %}
+        </section>
+        {% if listings %}<script>
+        document.addEventListener('DOMContentLoaded',()=>{const rail=document.getElementById('listingsCarousel'),prev=document.getElementById('listingsPrev'),next=document.getElementById('listingsNext');if(!rail)return;const update=()=>{const max=rail.scrollWidth-rail.clientWidth;prev?.classList.toggle('is-hidden',rail.scrollLeft<=2);next?.classList.toggle('is-hidden',rail.scrollLeft>=max-2);};prev?.addEventListener('click',()=>rail.scrollBy({left:-rail.clientWidth*.8,behavior:'smooth'}));next?.addEventListener('click',()=>rail.scrollBy({left:rail.clientWidth*.8,behavior:'smooth'}));rail.addEventListener('scroll',update,{passive:true});new ResizeObserver(update).observe(rail);update();});
+        </script>{% endif %}
     {% else %}
-        <!-- Login/Register Forms -->
-        <div class="auth-card">
-            <div class="auth-tabs">
-                <button type="button" class="auth-tab active" data-tab="login">SIGN IN</button>
-                <button type="button" class="auth-tab" data-tab="register">SIGN UP</button>
-            </div>
-
-            <!-- Login Form -->
             <form method="post" action="{% url 'login' %}" class="auth-form active" id="loginForm">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next }}">
@@ -324,7 +329,7 @@
             <!-- Register Form -->
             <form method="post" action="{% url 'register' %}" class="auth-form" id="registerForm">
                 {% csrf_token %}
-                
+
                 <div class="form-group">
                     <label for="id_reg_name">Full Name</label>
                     <input type="text" name="name" id="id_reg_name" placeholder="John Doe" required>
@@ -382,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function() {
         registerForm.addEventListener('submit', function(e) {
             const password = document.getElementById('id_reg_password').value;
             const password2 = document.getElementById('id_reg_password2').value;
-            
+
             if (password !== password2) {
                 e.preventDefault();
                 alert('Passwords do not match.');

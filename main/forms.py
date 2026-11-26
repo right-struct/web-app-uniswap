@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_image_file_extension
+from .models import Item
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
@@ -61,3 +63,22 @@ class ManagedUserForm(forms.ModelForm):
             data['email'] = email
             validate_sdu_email(email)
         return data
+
+
+class ItemForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = ('title', 'description', 'category', 'listing_type', 'price', 'contact', 'image')
+        widgets = {'description': forms.Textarea(attrs={'rows': 5})}
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            if image.size > 5 * 1024 * 1024:
+                raise ValidationError('Image must be 5 MB or smaller.')
+            validate_image_file_extension(image)
+            try:
+                image.image.verify()
+            except (OSError, ValueError):
+                raise ValidationError('Upload a valid image file.')
+        return image

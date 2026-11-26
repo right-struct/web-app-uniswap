@@ -10,6 +10,7 @@ urlpatterns = [
     path('help/', views.help, name='help'),
     path('mail/', views.mail, name='mail'),
     path('search/', views.search, name='search'),
+    path('posts/create/', views.create_post, name='create_post'),
     path('wishlist/', views.wishlist, name='wishlist'),
     path('account/', views.account, name='account'),
     path('auth/login/', auth_views.LoginView.as_view(authentication_form=EmailAuthenticationForm, template_name='main/account.html'), name='login'),

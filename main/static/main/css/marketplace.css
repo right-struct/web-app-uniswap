@@ -326,6 +326,27 @@ a {
   gap: 18px;
 }
 
+.listing-form-page { max-width: 760px; padding-top: 30px; }
+.listing-form-page .categories-title { margin: 18px 0; }
+.listing-form { background: var(--white); padding: 28px; box-shadow: var(--shadow-figma); }
+.listing-field { margin-bottom: 18px; }
+.listing-field label { display: block; color: var(--primary-blue); font-weight: 600; margin-bottom: 7px; }
+.listing-field input, .listing-field textarea, .listing-field select { width: 100%; padding: 11px 13px; border: 1px solid #dcdfe3; font: inherit; }
+.listing-image-preview { display: block; max-width: 100%; max-height: 280px; margin: 0 0 20px; object-fit: contain; }
+.profile-listings { margin-top: 26px; width: 100%; overflow: hidden; }
+.profile-listings-heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; color:var(--primary-blue); }
+.carousel-controls { display:flex; gap:8px; }
+.carousel-arrow { width:36px;height:36px;background:var(--primary-blue);color:var(--white);font-size:24px; }
+.carousel-arrow.is-hidden { visibility:hidden; pointer-events:none; }
+.listings-carousel { display:flex; flex-wrap:nowrap; gap:14px; overflow-x:auto; overflow-y:hidden; scroll-behavior:smooth; scrollbar-width:thin; padding:4px 2px 12px; touch-action:pan-x; }
+.profile-listing-card { flex:0 0 190px; min-width:0; height:250px; display:flex; flex-direction:column; gap:6px; padding:8px; background:var(--primary-blue); color:var(--white); box-shadow:var(--shadow-figma); }
+.profile-listing-card img,.profile-listing-no-image { width:100%; height:140px; flex:none; object-fit:cover; background:var(--white); color:#666; display:grid; place-items:center; }
+.profile-listing-title { font-weight:600; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.profile-listing-price { color:var(--primary-orange); font-weight:700; }
+.profile-listing-status { font-size:12px; opacity:.85; }
+.listings-empty { padding:20px; background:var(--white); color:#666; }
+@media(max-width:600px) { .listing-form { padding:20px; } .profile-listing-card { flex-basis:165px; } }
+
 .post-card {
   background-color: var(--primary-blue);
   border-radius: 2px;
